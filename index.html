@@ -17,7 +17,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* Main Styling */
         body {
             background-color: black;
             color: gold;
@@ -122,7 +121,8 @@
     </footer>
 
     <script>
-        const corsProxy = 'https://api.allorigins.win/raw?url='; // CORS bypass
+        // ✅ Add your Bearer Token here
+        const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAK%2BezQEAAAAAor5aL3gMsXWug1ES5NGnJwOsBrk%3DgMTyJpMvnLHyHAfGSnqeEM3O7m6tQCLdHMAAkTQGEvVjWIPQxJ';
 
         async function analyzeProfile() {
             const usernameInput = document.getElementById('username').value;
@@ -137,10 +137,14 @@
             const cleanUsername = usernameInput.replace(/^https?:\/\/(www\.)?(x\.com|twitter\.com)\//, '').trim();
 
             try {
-                const response = await fetch(`${corsProxy}https://api.x.com/2/users/by/username/${cleanUsername}?user.fields=public_metrics,created_at`);
+                const response = await fetch(`https://api.x.com/2/users/by/username/${cleanUsername}?user.fields=public_metrics,created_at`, {
+                    headers: {
+                        'Authorization': `Bearer ${bearerToken}`
+                    }
+                });
+
                 const data = await response.json();
 
-                // ✅ Check if data exists before accessing
                 if (!data.data) {
                     resultDiv.innerHTML = `<span style="color: red;">❌ User not found or API error.</span>`;
                     return;
@@ -148,7 +152,6 @@
 
                 const { public_metrics, created_at } = data.data;
 
-                // 🤖 Calculate Bot Score Based on Heuristics
                 let botScore = 0;
                 if (public_metrics.followers_count < 50) botScore += 30;
                 if (public_metrics.following_count > 1000) botScore += 30;
@@ -170,4 +173,41 @@
 
             } catch (error) {
                 console.error("Error:", error);
-                resultDiv.innerHTML = `<span style="color: red;">Error: ${error.me
+                resultDiv.innerHTML = `<span style="color: red;">Error: ${error.message}</span>`;
+            }
+        }
+
+        function createChart(followers, following, tweets, botScore) {
+            const ctx = document.getElementById('botChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Followers', 'Following', 'Tweets', 'Bot Score'],
+                    datasets: [{
+                        label: 'Bot Analysis',
+                        data: [followers, following, tweets, botScore],
+                        backgroundColor: ['green', 'gold', 'gold', botScore > 60 ? 'red' : 'green']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function shareDoctorKarl() {
+            if (navigator.share) {
+                navigator.share({
+                    title: "Digital Dr Karl",
+                    text: "Check out this X profile analyzer!",
+                    url: window.location.href
+                }).catch(err => console.log('Error sharing:', err));
+            } else {
+                alert("Sharing not supported on this browser.");
+            }
+        }
+    </script>
+</body>
