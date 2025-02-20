@@ -125,9 +125,11 @@
     </footer>
 
     <script>
-        // ✅ Add your Bearer Token here
+        // ✅ Bearer Token (Replace with your own)
         const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAK%2BezQEAAAAAor5aL3gMsXWug1ES5NGnJwOsBrk%3DgMTyJpMvnLHyHAfGSnqeEM3O7m6tQCLdHMAAkTQGEvVjWIPQxJ';
-        const corsProxy = 'https://cors-anywhere.herokuapp.com/'; // Public CORS Proxy
+        
+        // ✅ AllOrigins CORS Proxy
+        const corsProxy = 'https://api.allorigins.win/get?url=';
 
         async function analyzeProfile() {
             const usernameInput = document.getElementById('username').value;
@@ -142,13 +144,15 @@
             const cleanUsername = usernameInput.replace(/^https?:\/\/(www\.)?(x\.com|twitter\.com)\//, '').trim();
 
             try {
-                const response = await fetch(`${corsProxy}https://api.x.com/2/users/by/username/${cleanUsername}?user.fields=public_metrics,created_at`, {
+                const apiUrl = `https://api.x.com/2/users/by/username/${cleanUsername}?user.fields=public_metrics,created_at`;
+                const response = await fetch(`${corsProxy}${encodeURIComponent(apiUrl)}`, {
                     headers: {
                         'Authorization': `Bearer ${bearerToken}`
                     }
                 });
 
-                const data = await response.json();
+                const proxyData = await response.json();
+                const data = JSON.parse(proxyData.contents);
 
                 if (!data.data) {
                     resultDiv.innerHTML = `<span style="color: red;">❌ User not found or API error.</span>`;
