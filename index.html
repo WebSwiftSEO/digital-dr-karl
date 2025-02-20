@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Dr Karl 🧑‍🔬</title>
+
+    <!-- SEO Metadata -->
+    <meta name="description" content="Digital Dr Karl – Analyze X profiles and detect bots using AI and the X API! 🤖⚡">
+    <meta name="keywords" content="Digital Dr Karl, X bot detector, X profile analyzer, AI insights, bot detection, Dr Karl, Aussie humor">
+    <meta property="og:title" content="Digital Dr Karl 🧑‍🔬">
+    <meta property="og:description" content="Analyze X profiles with Digital Dr Karl and expose bots using real data.">
+    <meta property="og:url" content="https://digital-dr-karl.pages.dev/">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Chart.js for Graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            background-color: black;
+            color: gold;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            border: 3px solid gold;
+            border-radius: 12px;
+            background: black;
+            box-shadow: 0px 0px 30px rgba(255, 215, 0, 0.8), 0px 0px 30px rgba(0, 255, 0, 0.8);
+        }
+
+        h1 {
+            text-shadow: 0px 0px 15px gold, 0px 0px 15px green;
+            font-size: 28px;
+        }
+
+        input, button {
+            width: 85%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid gold;
+            background: black;
+            color: gold;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 8px;
+            outline: none;
+            box-shadow: 0px 0px 12px green, 0px 0px 12px gold;
+        }
+
+        button {
+            cursor: pointer;
+            background: linear-gradient(45deg, gold, green);
+            color: black;
+            font-weight: bold;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        #botChartContainer {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            padding-top: 20px;
+        }
+
+        .share-btn {
+            margin-top: 30px;
+            width: 80%;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, green, gold);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            color: black;
+            box-shadow: 0px 0px 20px green, 0px 0px 20px gold;
+        }
+
+        .share-btn:hover {
+            background: linear-gradient(45deg, gold, green);
+            color: white;
+            box-shadow: 0px 0px 25px gold, 0px 0px 25px green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Digital Dr Karl 🧑‍🔬</h1>
+        <p>Analyze X profiles, detect bots, and have a laugh! 🤖⚡</p>
+        <input type="text" id="username" placeholder="Enter X Username or URL">
+        <button onclick="analyzeProfile()">Analyze</button>
+        <div id="result"></div>
+        <div id="botChartContainer">
+            <canvas id="botChart"></canvas>
+        </div>
+    </div>
+
+    <button class="share-btn" onclick="shareDoctorKarl()">📤 Share Digital Dr Karl</button>
+
+    <script>
+        const clientId = 'Ui1aNmRzWmw2ZXJubWNtc3FNdXQ6MTpjaQ'; // Replace with your actual Client ID
+        const clientSecret = 'C0lqIDxzm0n6pkVVhQe-m5mhsz4hX-rq9hJ-B-s7cRv7oLtfft'; // Replace with your actual Client Secret
+        let bearerToken = '';
+
+        async function getBearerToken() {
+            const credentials = btoa(`${clientId}:${clientSecret}`);
+            const corsProxy = 'https://corsproxy.io/?';
+
+            try {
+                const response = await fetch(`${corsProxy}https://api.x.com/oauth2/token`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Basic ${credentials}`,
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    body: 'grant_type=client_credentials'
+                });
+
+                const data = await response.json();
+                if (data.access_token) {
+                    bearerToken = data.access_token;
+                    console.log('Bearer Token:', bearerToken);
+                } else {
+                    console.error('Failed to obtain bearer token:', data);
+                }
+            } catch (error) {
+                console.error('Error fetching bearer token:', error);
+            }
+        }
+
+        async function analyzeProfile() {
+            const usernameInput = document.getElementById('username').value;
+            const resultDiv = document.getElementById('result');
+            const chartContainer = document.getElementById('botChartContainer');
+
+            if (!usernameInput) {
+                resultDiv.innerHTML = "<span style='color: red;'>Please enter a username.</span>";
+                return;
+            }
+
+            if (!bearerToken) {
+                await getBearerToken();
+            }
+
+            const cleanUsername = usernameInput.replace(/^https?:\/\/(www\.)?(x\.com|twitter\.com)\//, '').trim();
+
+            try {
+                const response = await fetch(`https://api.x.com/2/users/by/username/${cleanUsername}?user.fields=public_metrics,created_at`, {
+                    headers: { "Authorization": `Bearer ${bearerToken}` }
+                });
+
+                if (!response.ok) throw new Error(`X API error: ${response.status}`);
+
+                const data = await response.json();
+                const { public_metrics, created_at } = data.data;
+
+                let botScore = 0;
+                if (public_metrics.followers_count < 50) botScore += 30;
+                if (public_metrics.following_count > 1000) botScore += 30;
+                if (public_metrics.tweet_count < 10) botScore += 20;
+                if (new Date(created_at).getFullYear() > 2023) botScore += 20;
+
+                resultDiv.innerHTML = `
+                    <p><strong>Username:</strong> ${data.data.username}</p>
+                    <p><strong>Followers:</strong> ${public_metrics.followers_count}</p>
+                    <p><strong>Following:</strong> ${public_metrics.following_count}</p>
+                    <p><strong>Total Tweets:</strong> ${public_metrics.tweet_count}</p>
+                    <p><strong>Account Created:</strong> ${new Date(created_at).toDateString()}</p>
+                    <p><strong>🤖 Bot Probability:</strong> ${botScore}%</p>
+                    <p>${botScore > 60 ? '⚔️ Bot Alert!' : '✅ Looks Human!'}</p>
+                `;
+
+                chartContainer.style.display = "block";
+                createChart(public_metrics.followers_count, public_metrics.following_count, public_metrics.tweet_count, botScore);
+
+            } catch (error) {
+                console.error("Error:", error);
+                resultDiv.innerHTML = `<span style="color: red;">Error: ${error.message}</span>`;
+            }
+        }
+
+        function createChart(followers, following, tweets, botScore) {
+            const ctx = document.getElementById('botChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Followers', 'Following', 'Tweets', 'Bot Score'],
+                    datasets: [{
+                        label: 'Bot Analysis',
+                        data: [followers, following, tweets, botScore],
+                        backgroundColor: ['green', 'gold', 'gold', botScore > 60 ? 'red' : 'green']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function shareDoctorKarl() {
+            if (navigator.share) {
+                navigator.share({
+                    title: "Digital Dr Karl",
+                    text: "Check out this X profile analyzer!",
+                    url: window.location.href
+                }).catch(err => console.log('Error sharing:', err));
+            } else {
+                alert("Sharing not supported on this browser.");
+            }
+        }
+    </script>
+</body>
+</html>
