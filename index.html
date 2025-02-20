@@ -2,25 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Dr Karl 🧑‍🔬</title>
 
-    <!-- Favicon -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-
     <!-- SEO Metadata -->
-    <meta name="description" content="Digital Dr Karl – Analyze X profiles, detect bots, and have a laugh! 🤖⚡">
-    <meta name="keywords" content="Digital Dr Karl, X bot detector, X profile analyzer, AI insights, bot detection, Dr Karl, Aussie humor, X API, social media analysis">
+    <meta name="description" content="Digital Dr Karl – Analyze X profiles and detect bots using AI and the X API! 🤖⚡">
+    <meta name="keywords" content="Digital Dr Karl, X bot detector, X profile analyzer, AI insights, bot detection, Dr Karl, Aussie humor">
     <meta property="og:title" content="Digital Dr Karl 🧑‍🔬">
     <meta property="og:description" content="Analyze X profiles with Digital Dr Karl and expose bots using real data.">
-    <meta property="og:url" content="https://webswiftseo.github.io/digital-dr-karl/">
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- Chart.js for Graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* Main Styling */
         body {
             background-color: black;
             color: gold;
@@ -98,12 +92,6 @@
             color: white;
             box-shadow: 0px 0px 25px gold, 0px 0px 25px green;
         }
-
-        footer {
-            margin-top: 50px;
-            color: gray;
-            font-size: 12px;
-        }
     </style>
 </head>
 <body>
@@ -120,16 +108,12 @@
 
     <button class="share-btn" onclick="shareDoctorKarl()">📤 Share Digital Dr Karl</button>
 
-    <footer>
-        <p>Made with ❤️ and Aussie humor. Powered by the X API. 🚀</p>
-    </footer>
-
     <script>
-        // ✅ Bearer Token (Replace with your own)
+        // ✅ CHANGE THIS TO YOUR GLITCH PROXY URL
+        const proxyURL = 'https://wooden-canyon-lunch.glitch.me/';
+
+        // ✅ ADD YOUR X API BEARER TOKEN HERE
         const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAK%2BezQEAAAAAor5aL3gMsXWug1ES5NGnJwOsBrk%3DgMTyJpMvnLHyHAfGSnqeEM3O7m6tQCLdHMAAkTQGEvVjWIPQxJ';
-        
-        // ✅ AllOrigins CORS Proxy
-        const corsProxy = 'https://api.allorigins.win/get?url=';
 
         async function analyzeProfile() {
             const usernameInput = document.getElementById('username').value;
@@ -145,14 +129,14 @@
 
             try {
                 const apiUrl = `https://api.x.com/2/users/by/username/${cleanUsername}?user.fields=public_metrics,created_at`;
-                const response = await fetch(`${corsProxy}${encodeURIComponent(apiUrl)}`, {
+
+                const response = await fetch(`${proxyURL}${apiUrl}`, {
                     headers: {
                         'Authorization': `Bearer ${bearerToken}`
                     }
                 });
 
-                const proxyData = await response.json();
-                const data = JSON.parse(proxyData.contents);
+                const data = await response.json();
 
                 if (!data.data) {
                     resultDiv.innerHTML = `<span style="color: red;">❌ User not found or API error.</span>`;
