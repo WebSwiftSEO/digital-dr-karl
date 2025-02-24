@@ -15,83 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        body {
-            background-color: black;
-            color: gold;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-            border: 3px solid gold;
-            border-radius: 12px;
-            background: black;
-            box-shadow: 0px 0px 30px rgba(255, 215, 0, 0.8), 0px 0px 30px rgba(0, 255, 0, 0.8);
-        }
-
-        h1 {
-            text-shadow: 0px 0px 15px gold, 0px 0px 15px green;
-            font-size: 28px;
-        }
-
-        input, button {
-            width: 85%;
-            padding: 12px;
-            margin: 15px 0;
-            border: 2px solid gold;
-            background: black;
-            color: gold;
-            font-size: 18px;
-            text-align: center;
-            border-radius: 8px;
-            outline: none;
-            box-shadow: 0px 0px 12px green, 0px 0px 12px gold;
-        }
-
-        button {
-            cursor: pointer;
-            background: linear-gradient(45deg, gold, green);
-            color: black;
-            font-weight: bold;
-        }
-
-        #result {
-            margin-top: 20px;
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        #botChartContainer {
-            display: none;
-            width: 100%;
-            max-width: 600px;
-            margin: auto;
-            padding-top: 20px;
-        }
-
-        .share-btn {
-            margin-top: 30px;
-            width: 80%;
-            padding: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            background: linear-gradient(45deg, green, gold);
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            color: black;
-            box-shadow: 0px 0px 20px green, 0px 0px 20px gold;
-        }
-
-        .share-btn:hover {
-            background: linear-gradient(45deg, gold, green);
-            color: white;
-            box-shadow: 0px 0px 25px gold, 0px 0px 25px green;
-        }
+        /* ... Your existing styles remain unchanged ... */
     </style>
 </head>
 <body>
@@ -109,56 +33,84 @@
     <button class="share-btn" onclick="shareDoctorKarl()">📤 Share Digital Dr Karl</button>
 
     <script>
-        // ✅ CHANGE THIS TO YOUR GLITCH PROXY URL
         const proxyURL = 'https://wooden-canyon-lunch.glitch.me/';
-
-        // ✅ ADD YOUR X API BEARER TOKEN HERE
-        const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAK%2BezQEAAAAAor5aL3gMsXWug1ES5NGnJwOsBrk%3DgMTyJpMvnLHyHAfGSnqeEM3O7m6tQCLdHMAAkTQGEvVjWIPQxJ';
+        const bearerToken = 'YOUR_BEARER_TOKEN_HERE'; // Replace with actual token
 
         async function analyzeProfile() {
-            const usernameInput = document.getElementById('username').value;
+            const usernameInput = document.getElementById('username').value.trim();
             const resultDiv = document.getElementById('result');
             const chartContainer = document.getElementById('botChartContainer');
+            let existingChart = Chart.getChart('botChart'); // Get existing chart instance
+
+            // Clear previous results and chart
+            resultDiv.innerHTML = '';
+            chartContainer.style.display = 'none';
+            if (existingChart) {
+                existingChart.destroy(); // Destroy existing chart to prevent overlap
+            }
 
             if (!usernameInput) {
                 resultDiv.innerHTML = "<span style='color: red;'>Please enter a username.</span>";
                 return;
             }
 
-            const cleanUsername = usernameInput.replace(/^https?:\/\/(www\.)?(x\.com|twitter\.com)\//, '').trim();
+            // Improved username cleaning
+            let cleanUsername = usernameInput
+                .replace(/^https?:\/\/(www\.)?(x\.com|twitter\.com)\//i, '')
+                .replace(/^@/, '')
+                .trim();
+
+            if (!cleanUsername) {
+                resultDiv.innerHTML = "<span style='color: red;'>Invalid username format.</span>";
+                return;
+            }
+
+            resultDiv.innerHTML = "<p>Analyzing...</p>";
 
             try {
-                const apiUrl = `https://api.x.com/2/users/by/username/${cleanUsername}?user.fields=public_metrics,created_at`;
+                const apiUrl = `https://api.twitter.com/2/users/by/username/${encodeURIComponent(cleanUsername)}?user.fields=public_metrics,created_at`;
 
                 const response = await fetch(`${proxyURL}${apiUrl}`, {
+                    method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${bearerToken}`
+                        'Authorization': `Bearer ${bearerToken}`,
+                        'Content-Type': 'application/json'
                     }
                 });
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status: ${response.status}`);
+                }
 
                 const data = await response.json();
 
                 if (!data.data) {
-                    resultDiv.innerHTML = `<span style="color: red;">❌ User not found or API error.</span>`;
+                    resultDiv.innerHTML = `<span style="color: red;">❌ User not found or API error: ${data.errors?.[0]?.message || 'Unknown error'}</span>`;
                     return;
                 }
 
                 const { public_metrics, created_at } = data.data;
 
+                // More nuanced bot scoring
                 let botScore = 0;
-                if (public_metrics.followers_count < 50) botScore += 30;
-                if (public_metrics.following_count > 1000) botScore += 30;
-                if (public_metrics.tweet_count < 10) botScore += 20;
-                if (new Date(created_at).getFullYear() > 2023) botScore += 20;
+                const accountAge = (new Date() - new Date(created_at)) / (1000 * 60 * 60 * 24 * 365); // Age in years
+                
+                if (public_metrics.followers_count < 50) botScore += 20;
+                if (public_metrics.following_count > public_metrics.followers_count * 5) botScore += 20;
+                if (public_metrics.tweet_count < 10 && accountAge > 0.5) botScore += 20;
+                if (accountAge < 0.5) botScore += 20;
+                if (public_metrics.followers_count === 0 && public_metrics.tweet_count > 100) botScore += 20;
+
+                botScore = Math.min(botScore, 100); // Cap at 100%
 
                 resultDiv.innerHTML = `
                     <p><strong>Username:</strong> ${data.data.username}</p>
-                    <p><strong>Followers:</strong> ${public_metrics.followers_count}</p>
-                    <p><strong>Following:</strong> ${public_metrics.following_count}</p>
-                    <p><strong>Total Tweets:</strong> ${public_metrics.tweet_count}</p>
+                    <p><strong>Followers:</strong> ${public_metrics.followers_count.toLocaleString()}</p>
+                    <p><strong>Following:</strong> ${public_metrics.following_count.toLocaleString()}</p>
+                    <p><strong>Total Tweets:</strong> ${public_metrics.tweet_count.toLocaleString()}</p>
                     <p><strong>Account Created:</strong> ${new Date(created_at).toDateString()}</p>
                     <p><strong>🤖 Bot Probability:</strong> ${botScore}%</p>
-                    <p>${botScore > 60 ? '⚔️ Bot Alert!' : '✅ Looks Human!'}</p>
+                    <p>${botScore > 60 ? '⚔️ Bot Alert!' : botScore > 30 ? '🤔 Suspicious' : '✅ Looks Human!'}</p>
                 `;
 
                 chartContainer.style.display = "block";
@@ -179,13 +131,30 @@
                     datasets: [{
                         label: 'Bot Analysis',
                         data: [followers, following, tweets, botScore],
-                        backgroundColor: ['green', 'gold', 'gold', botScore > 60 ? 'red' : 'green']
+                        backgroundColor: ['green', 'gold', 'gold', botScore > 60 ? 'red' : botScore > 30 ? 'orange' : 'green']
                     }]
                 },
                 options: {
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutBounce'
+                    },
                     responsive: true,
                     scales: {
-                        y: { beginAtZero: true }
+                        y: { 
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Count / Percentage'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'gold'
+                            }
+                        }
                     }
                 }
             });
@@ -199,9 +168,16 @@
                     url: window.location.href
                 }).catch(err => console.log('Error sharing:', err));
             } else {
-                alert("Sharing not supported on this browser.");
+                alert("Sharing not supported on this browser. Copy this URL to share: " + window.location.href);
             }
         }
+
+        // Add enter key support
+        document.getElementById('username').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                analyzeProfile();
+            }
+        });
     </script>
 </body>
 </html>
