@@ -1,7 +1,4 @@
-// ✅ Digital Dr Karl Service Worker
-// Provides offline support for the PWA
-
-const CACHE_NAME = 'dr-karl-cache-v1';
+const CACHE_NAME = 'dr-karl-cache-v2';
 const urlsToCache = [
   './',
   './index.html',
@@ -11,11 +8,10 @@ const urlsToCache = [
 self.addEventListener('install', event => {
   console.log('[Service Worker] Installing...');
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('[Service Worker] Caching app shell');
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      console.log('[Service Worker] Caching app shell');
+      return cache.addAll(urlsToCache);
+    })
   );
 });
 
@@ -34,11 +30,8 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  console.log('[Service Worker] Fetching:', event.request.url);
   event.respondWith(
     caches.match(event.request)
-      .then(response => {
-        return response || fetch(event.request);
-      })
+      .then(response => response || fetch(event.request))
   );
 });
