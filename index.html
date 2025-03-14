@@ -6,31 +6,13 @@
     <title>Digital Dr Karl 🧑‍🔬</title>
 
     <!-- ==========================
-    ✅ Digital Dr Karl - DEV INSTRUCTIONS
+    ✅ DEV INSTRUCTIONS
     ==========================
-    1. This DEMO randomly generates bot scores & jokes.
-    2. To enable real-time X (Twitter) API:
-        - Use a CORS proxy (e.g., Cloudflare Workers)
-        - Get your X API Bearer Token
-        - Replace the demoAnalyzeProfile() with analyzeProfile()
-
-    Cloudflare Proxy Setup (example):
-    -----------------------------------
-    addEventListener('fetch', event => {
-        event.respondWith(handleRequest(event.request));
-    });
-
-    async function handleRequest(request) {
-        const url = new URL(request.url);
-        url.hostname = 'api.twitter.com';
-        return fetch(url, {
-            headers: {
-                'Authorization': 'Bearer YOUR_BEARER_TOKEN'
-            }
-        });
-    }
-    ==========================
-    -->
+    1. DEMO site = Random Bot Analysis + Science Humor
+    2. For real API:
+        - Use Cloudflare Proxy (setup instructions above)
+        - Replace demoAnalyzeProfile() with analyzeProfile()
+    ========================== -->
 
     <!-- Base64 Favicon -->
     <link rel="icon" type="image/png" href="data:image/png;base64,iVBOR...">
@@ -41,11 +23,8 @@
     <meta property="og:description" content="Analyze X profiles, detect bots, and laugh while learning!">
     <meta name="twitter:card" content="summary_large_image">
 
-    <!-- Chart.js for graphs -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Typewriter + Sound Effects -->
-    <script src="https://cdn.jsdelivr.net/npm/typewriter-effect@latest/dist/core.js"></script>
 
     <style>
         body {
@@ -80,17 +59,6 @@
             }
             to {
                 text-shadow: 0 0 20px #00FF00, 0 0 30px #00FF00;
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
             }
         }
 
@@ -137,14 +105,14 @@
             padding-top: 20px;
         }
 
-        .joke-box, .fact-box {
-            margin: 20px auto;
-            width: 80%;
+        .joke-box {
+            margin-top: 20px;
+            width: 90%;
             background-color: #111;
-            color: #00FF00;
+            color: #0f0;
             padding: 15px;
             border-radius: 12px;
-            box-shadow: 0px 0px 15px #00FF00;
+            box-shadow: 0px 0px 15px #0f0;
             font-size: 16px;
             animation: fadeIn 1s ease-in;
         }
@@ -170,14 +138,35 @@
             color: gray;
         }
 
+        .social-links {
+            margin-top: 40px;
+        }
+
         .social-links a {
-            margin: 0 10px;
+            display: block;
+            font-size: 22px;
+            color: red;
+            margin: 10px 0;
+            text-decoration: none;
+            font-weight: bold;
         }
 
         .social-links img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -186,6 +175,7 @@
 
     <div class="container">
         <img src="data:image/png;base64,iVBOR...AVATAR_BASE64" alt="Dr Karl Avatar" class="avatar">
+
         <h1>Digital Dr Karl 🧑‍🔬</h1>
         <p>Analyze X profiles, detect bots, and have a laugh! 🤖⚡</p>
 
@@ -199,22 +189,21 @@
             <canvas id="botChart"></canvas>
         </div>
 
-        <div class="joke-box" id="jokeBox">Ready for a laugh?</div>
-        <div class="fact-box" id="factBox">Did you know? Your brain is sometimes 70% water!</div>
+        <div class="joke-box" id="jokeBox">Ready for a laugh? Click Analyze!</div>
     </div>
 
     <button class="share-btn" onclick="shareDoctorKarl()">📤 Share Digital Dr Karl</button>
 
-    <!-- Social Links -->
+    <!-- Social Links (Red & Large) -->
     <div class="social-links">
         <a href="https://twitter.com/DoctorKarl" target="_blank">
-            <img src="data:image/png;base64,iVBOR...X_ICON_BASE64" alt="Twitter">
+            <img src="data:image/png;base64,iVBOR...X_ICON_BASE64" alt="Twitter">Follow Dr Karl on Twitter
         </a>
         <a href="https://www.facebook.com/DrKarl/" target="_blank">
-            <img src="data:image/png;base64,iVBOR...FB_ICON_BASE64" alt="Facebook">
+            <img src="data:image/png;base64,iVBOR...FB_ICON_BASE64" alt="Facebook">Follow Dr Karl on Facebook
         </a>
         <a href="https://www.instagram.com/doctorkarl/" target="_blank">
-            <img src="data:image/png;base64,iVBOR...IG_ICON_BASE64" alt="Instagram">
+            <img src="data:image/png;base64,iVBOR...IG_ICON_BASE64" alt="Instagram">Follow Dr Karl on Instagram
         </a>
     </div>
 
@@ -224,70 +213,60 @@
         🔧 Setup instructions inside the <strong>index.html</strong> comments above!
     </footer>
 
-    <!-- Scripts -->
     <script>
         const jokes = [
             "Why don't scientists trust atoms? Because they make up everything!",
             "Parallel lines have so much in common. Too bad they’ll never meet.",
             "What do you call an educated tube? A graduated cylinder!",
-            "Schrodinger's cat walks into a bar... and doesn't."
+            "Schrodinger's cat walks into a bar... and doesn’t.",
+            "What did one DNA strand say to the other? Do these genes make me look fat?",
+            "Two bacteria walk into a bar. The bartender says, 'We don't serve your kind here.' One bacteria replies, 'But we work here!'.",
+            "Why can't you trust an atom? They make up everything!",
+            "Did you hear oxygen went on a date with potassium? It went OK.",
+            "Why are chemists excellent for solving problems? They have all the solutions.",
+            "Never trust a math teacher holding graph paper. They must be plotting something.",
+            "Why did the photon refuse to check its luggage? It was traveling light!",
+            "Why are skeletons so calm? Nothing gets under their skin.",
+            "What's a robot’s favorite music? Heavy metal.",
+            "I told a joke about a pencil once... it had no point.",
+            "How do you know the moon is going broke? It's down to its last quarter.",
+            "If you’re not part of the solution, you’re part of the precipitate.",
+            "How does NASA organize their parties? They planet.",
+            "What did the 0 say to the 8? Nice belt!",
+            "Did you hear about the neutron who was arrested? He was released without charge.",
+            "What’s a computer’s favorite snack? Microchips!"
         ];
-
-        const facts = [
-            "Octopuses have three hearts and blue blood!",
-            "A day on Venus is longer than its year!",
-            "Bananas are radioactive because of potassium-40!",
-            "Australia is wider than the moon!"
-        ];
-
-        const beepSound = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEA...'); // Small beep SFX
 
         function demoAnalyzeProfile() {
             const username = document.getElementById('username').value;
             const resultDiv = document.getElementById('result');
             const jokeBox = document.getElementById('jokeBox');
-            const factBox = document.getElementById('factBox');
 
             if (!username) {
                 resultDiv.innerHTML = "<span style='color:red;'>Please enter a username.</span>";
                 return;
             }
 
-            beepSound.play();
-
             const followers = Math.floor(Math.random() * 10000);
             const following = Math.floor(Math.random() * 5000);
             const tweets = Math.floor(Math.random() * 1000);
             const botScore = Math.floor(Math.random() * 100);
 
-            typeWriterEffect(`
-                Username: ${username}\n
-                Followers: ${followers}\n
-                Following: ${following}\n
-                Tweets: ${tweets}\n
-                🤖 Bot Probability: ${botScore}%\n
-                ${botScore > 60 ? '⚔️ Bot Alert! Might be Skynet!' : '✅ Looks Human! Probably loves science!'}
-            `, resultDiv);
+            const followersGazillion = `${followers} Gazillion`;
+
+            resultDiv.innerHTML = `
+                <p><strong>Username:</strong> ${username}</p>
+                <p><strong>Followers:</strong> ${followersGazillion}</p>
+                <p><strong>Following:</strong> ${following}</p>
+                <p><strong>Total Tweets:</strong> ${tweets}</p>
+                <p><strong>🤖 Bot Probability:</strong> ${botScore}%</p>
+                <p>${botScore > 60 ? '⚔️ Bot Alert! Might be Skynet!' : '✅ Looks Human! Probably loves science!'}</p>
+            `;
 
             document.getElementById('botChartContainer').style.display = "block";
             createChart(followers, following, tweets, botScore);
 
             jokeBox.innerHTML = jokes[Math.floor(Math.random() * jokes.length)];
-            factBox.innerHTML = facts[Math.floor(Math.random() * facts.length)];
-        }
-
-        function typeWriterEffect(text, element) {
-            element.innerHTML = "";
-            let index = 0;
-
-            function type() {
-                if (index < text.length) {
-                    element.innerHTML += text.charAt(index);
-                    index++;
-                    setTimeout(type, 40);
-                }
-            }
-            type();
         }
 
         function createChart(followers, following, tweets, botScore) {
@@ -326,6 +305,7 @@
             }
         }
     </script>
+
 </body>
 
 </html>
