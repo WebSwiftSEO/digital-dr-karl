@@ -4,7 +4,5 @@
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#FFD700",
-  "description": "Analyze X profiles, detect bots, and have a laugh! 🤖⚡",
-  "icons": []
+  "theme_color": "#FFD700"
 }
