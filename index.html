@@ -5,140 +5,128 @@
     <meta charset="UTF-8">
     <title>Digital Dr Karl 🧑‍🔬</title>
 
-    <!-- ✅ INSTRUCTIONS FOR DEVELOPERS:
-    ---------------------------------------------------------------
-    1. This DEMO triggers random results for demonstration purposes.
-    2. To make it functional, uncomment the real code below and:
-       - Set your proxy URL (Glitch or Cloudflare Worker recommended)
-       - Add your X (Twitter) API Bearer Token.
-    3. Replace the demo functions with the real ones.
-    4. Test on GitHub Pages / Cloudflare / Netlify, etc.
+    <!-- ==========================
+    ✅ Digital Dr Karl - DEV INSTRUCTIONS
+    ==========================
+    1. This DEMO randomly generates bot scores & jokes.
+    2. To enable real-time X (Twitter) API:
+        - Use a CORS proxy (e.g., Cloudflare Workers)
+        - Get your X API Bearer Token
+        - Replace the demoAnalyzeProfile() with analyzeProfile()
 
-    REAL API SETUP EXAMPLE:
-    ---------------------------------------------------------------
-    const proxyURL = 'https://your-glitch-proxy-url.glitch.me/';
-    const bearerToken = 'PASTE_YOUR_X_API_BEARER_TOKEN_HERE';
+    Cloudflare Proxy Setup (example):
+    -----------------------------------
+    addEventListener('fetch', event => {
+        event.respondWith(handleRequest(event.request));
+    });
 
-    async function analyzeProfile() {
-        const usernameInput = document.getElementById('username').value;
-        const resultDiv = document.getElementById('result');
-        const chartContainer = document.getElementById('botChartContainer');
-
-        if (!usernameInput) {
-            resultDiv.innerHTML = "<span style='color: red;'>Please enter a username.</span>";
-            return;
-        }
-
-        const cleanUsername = usernameInput.replace(/^https?:\/\/(www\.)?(x\.com|twitter\.com)\//, '').trim();
-
-        try {
-            const apiUrl = `https://api.x.com/2/users/by/username/${cleanUsername}?user.fields=public_metrics,created_at`;
-
-            const response = await fetch(`${proxyURL}${apiUrl}`, {
-                headers: {
-                    'Authorization': `Bearer ${bearerToken}`
-                }
-            });
-
-            const data = await response.json();
-
-            if (!data.data) {
-                resultDiv.innerHTML = `<span style="color: red;">❌ User not found or API error.</span>`;
-                return;
+    async function handleRequest(request) {
+        const url = new URL(request.url);
+        url.hostname = 'api.twitter.com';
+        return fetch(url, {
+            headers: {
+                'Authorization': 'Bearer YOUR_BEARER_TOKEN'
             }
-
-            const { public_metrics, created_at } = data.data;
-
-            let botScore = 0;
-            if (public_metrics.followers_count < 50) botScore += 30;
-            if (public_metrics.following_count > 1000) botScore += 30;
-            if (public_metrics.tweet_count < 10) botScore += 20;
-            if (new Date(created_at).getFullYear() > 2023) botScore += 20;
-
-            resultDiv.innerHTML = `
-                <p><strong>Username:</strong> ${data.data.username}</p>
-                <p><strong>Followers:</strong> ${public_metrics.followers_count}</p>
-                <p><strong>Following:</strong> ${public_metrics.following_count}</p>
-                <p><strong>Total Tweets:</strong> ${public_metrics.tweet_count}</p>
-                <p><strong>Account Created:</strong> ${new Date(created_at).toDateString()}</p>
-                <p><strong>🤖 Bot Probability:</strong> ${botScore}%</p>
-                <p>${botScore > 60 ? '⚔️ Bot Alert!' : '✅ Looks Human!'}</p>
-            `;
-
-            chartContainer.style.display = "block";
-            createChart(public_metrics.followers_count, public_metrics.following_count, public_metrics.tweet_count, botScore);
-
-        } catch (error) {
-            console.error("Error:", error);
-            resultDiv.innerHTML = `<span style="color: red;">Error: ${error.message}</span>`;
-        }
+        });
     }
-    ---------------------------------------------------------------
+    ==========================
     -->
 
-    <!-- ✅ SEO Metadata -->
-    <meta name="description" content="Digital Dr Karl – Analyze X profiles and detect bots using AI and the X API! 🤖⚡">
-    <meta name="keywords" content="Digital Dr Karl, X bot detector, X profile analyzer, AI insights, bot detection, Dr Karl, Aussie humor">
+    <!-- Base64 Favicon -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBOR...">
 
-    <!-- ✅ Social Media Previews -->
+    <!-- SEO Metadata -->
+    <meta name="description" content="Digital Dr Karl – Analyze X profiles, detect bots, and laugh while learning!">
     <meta property="og:title" content="Digital Dr Karl 🧑‍🔬">
-    <meta property="og:description" content="Analyze X profiles with Digital Dr Karl and expose bots using real data.">
+    <meta property="og:description" content="Analyze X profiles, detect bots, and laugh while learning!">
     <meta name="twitter:card" content="summary_large_image">
 
-    <!-- ✅ Chart.js (Used for Bot Analysis Chart) -->
+    <!-- Chart.js for graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- Typewriter + Sound Effects -->
+    <script src="https://cdn.jsdelivr.net/npm/typewriter-effect@latest/dist/core.js"></script>
+
     <style>
-        /* ✅ BASIC STYLING */
         body {
-            background-color: black;
-            color: gold;
+            background-color: #000;
+            color: #FFD700;
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
         }
 
         .container {
-            width: 80%;
+            width: 90%;
+            max-width: 600px;
             margin: auto;
             padding: 20px;
-            border: 3px solid gold;
+            border: 3px solid #FFD700;
             border-radius: 12px;
             background: black;
             box-shadow: 0px 0px 30px rgba(255, 215, 0, 0.8), 0px 0px 30px rgba(0, 255, 0, 0.8);
+            animation: fadeIn 1s ease-in;
         }
 
         h1 {
-            text-shadow: 0px 0px 15px gold, 0px 0px 15px green;
-            font-size: 28px;
+            text-shadow: 0px 0px 15px #FFD700, 0px 0px 15px #00FF00;
+            font-size: 30px;
+            animation: glow 2s infinite alternate;
         }
 
-        input,
-        button {
-            width: 85%;
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700;
+            }
+            to {
+                text-shadow: 0 0 20px #00FF00, 0 0 30px #00FF00;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        input, button {
+            width: 80%;
             padding: 12px;
             margin: 15px 0;
-            border: 2px solid gold;
+            border: 2px solid #FFD700;
             background: black;
-            color: gold;
+            color: #FFD700;
             font-size: 18px;
             text-align: center;
             border-radius: 8px;
             outline: none;
-            box-shadow: 0px 0px 12px green, 0px 0px 12px gold;
+            box-shadow: 0px 0px 12px #00FF00, 0px 0px 12px #FFD700;
+            transition: 0.3s;
         }
 
-        button {
-            cursor: pointer;
-            background: linear-gradient(45deg, gold, green);
+        button:hover {
+            background: linear-gradient(45deg, #FFD700, #00FF00);
             color: black;
-            font-weight: bold;
+            box-shadow: 0px 0px 20px #FFD700, 0px 0px 20px #00FF00;
+        }
+
+        .avatar {
+            width: 120px;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #FFD700;
+            margin-bottom: 20px;
         }
 
         #result {
             margin-top: 20px;
             font-size: 22px;
             font-weight: bold;
+            min-height: 100px;
         }
 
         #botChartContainer {
@@ -149,24 +137,30 @@
             padding-top: 20px;
         }
 
+        .joke-box, .fact-box {
+            margin: 20px auto;
+            width: 80%;
+            background-color: #111;
+            color: #00FF00;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px #00FF00;
+            font-size: 16px;
+            animation: fadeIn 1s ease-in;
+        }
+
         .share-btn {
             margin-top: 30px;
             width: 80%;
             padding: 20px;
             font-size: 24px;
             font-weight: bold;
-            background: linear-gradient(45deg, green, gold);
+            background: linear-gradient(45deg, #00FF00, #FFD700);
             border: none;
             border-radius: 12px;
             cursor: pointer;
             color: black;
-            box-shadow: 0px 0px 20px green, 0px 0px 20px gold;
-        }
-
-        .share-btn:hover {
-            background: linear-gradient(45deg, gold, green);
-            color: white;
-            box-shadow: 0px 0px 25px gold, 0px 0px 25px green;
+            box-shadow: 0px 0px 20px #00FF00, 0px 0px 20px #FFD700;
         }
 
         footer {
@@ -175,13 +169,23 @@
             font-size: 14px;
             color: gray;
         }
+
+        .social-links a {
+            margin: 0 10px;
+        }
+
+        .social-links img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
     </style>
 </head>
 
 <body>
 
-    <!-- ✅ DEMO UI -->
     <div class="container">
+        <img src="data:image/png;base64,iVBOR...AVATAR_BASE64" alt="Dr Karl Avatar" class="avatar">
         <h1>Digital Dr Karl 🧑‍🔬</h1>
         <p>Analyze X profiles, detect bots, and have a laugh! 🤖⚡</p>
 
@@ -194,59 +198,102 @@
         <div id="botChartContainer">
             <canvas id="botChart"></canvas>
         </div>
+
+        <div class="joke-box" id="jokeBox">Ready for a laugh?</div>
+        <div class="fact-box" id="factBox">Did you know? Your brain is sometimes 70% water!</div>
     </div>
 
     <button class="share-btn" onclick="shareDoctorKarl()">📤 Share Digital Dr Karl</button>
 
+    <!-- Social Links -->
+    <div class="social-links">
+        <a href="https://twitter.com/DoctorKarl" target="_blank">
+            <img src="data:image/png;base64,iVBOR...X_ICON_BASE64" alt="Twitter">
+        </a>
+        <a href="https://www.facebook.com/DrKarl/" target="_blank">
+            <img src="data:image/png;base64,iVBOR...FB_ICON_BASE64" alt="Facebook">
+        </a>
+        <a href="https://www.instagram.com/doctorkarl/" target="_blank">
+            <img src="data:image/png;base64,iVBOR...IG_ICON_BASE64" alt="Instagram">
+        </a>
+    </div>
+
     <footer>
-        <p>🚀 Clone this project on GitHub:
-            <a href="https://github.com/WebSwiftSEO?tab=repositories" target="_blank" style="color:gold;">
-                WebSwiftSEO Repositories
-            </a>
-        </p>
-        <p>🔧 Setup instructions inside the <strong>index.html</strong> comments above!</p>
+        🚀 Clone this project on GitHub:  
+        <a href="https://github.com/WebSwiftSEO?tab=repositories" target="_blank" style="color:gold;">WebSwiftSEO Repositories</a><br>
+        🔧 Setup instructions inside the <strong>index.html</strong> comments above!
     </footer>
 
+    <!-- Scripts -->
     <script>
-        // ✅ DEMO ANALYZE FUNCTION (No API call, just random results)
-        function demoAnalyzeProfile() {
-            const usernameInput = document.getElementById('username').value;
-            const resultDiv = document.getElementById('result');
-            const chartContainer = document.getElementById('botChartContainer');
+        const jokes = [
+            "Why don't scientists trust atoms? Because they make up everything!",
+            "Parallel lines have so much in common. Too bad they’ll never meet.",
+            "What do you call an educated tube? A graduated cylinder!",
+            "Schrodinger's cat walks into a bar... and doesn't."
+        ];
 
-            if (!usernameInput) {
-                resultDiv.innerHTML = "<span style='color: red;'>Please enter a username.</span>";
+        const facts = [
+            "Octopuses have three hearts and blue blood!",
+            "A day on Venus is longer than its year!",
+            "Bananas are radioactive because of potassium-40!",
+            "Australia is wider than the moon!"
+        ];
+
+        const beepSound = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEA...'); // Small beep SFX
+
+        function demoAnalyzeProfile() {
+            const username = document.getElementById('username').value;
+            const resultDiv = document.getElementById('result');
+            const jokeBox = document.getElementById('jokeBox');
+            const factBox = document.getElementById('factBox');
+
+            if (!username) {
+                resultDiv.innerHTML = "<span style='color:red;'>Please enter a username.</span>";
                 return;
             }
 
-            // ✅ Generate random demo data
+            beepSound.play();
+
             const followers = Math.floor(Math.random() * 10000);
             const following = Math.floor(Math.random() * 5000);
             const tweets = Math.floor(Math.random() * 1000);
             const botScore = Math.floor(Math.random() * 100);
 
-            // ✅ Show simulated result
-            resultDiv.innerHTML = `
-                <p><strong>Username:</strong> ${usernameInput}</p>
-                <p><strong>Followers:</strong> ${followers}</p>
-                <p><strong>Following:</strong> ${following}</p>
-                <p><strong>Total Tweets:</strong> ${tweets}</p>
-                <p><strong>🤖 Bot Probability:</strong> ${botScore}%</p>
-                <p>${botScore > 60 ? '⚔️ Bot Alert!' : '✅ Looks Human!'}</p>
-            `;
+            typeWriterEffect(`
+                Username: ${username}\n
+                Followers: ${followers}\n
+                Following: ${following}\n
+                Tweets: ${tweets}\n
+                🤖 Bot Probability: ${botScore}%\n
+                ${botScore > 60 ? '⚔️ Bot Alert! Might be Skynet!' : '✅ Looks Human! Probably loves science!'}
+            `, resultDiv);
 
-            // ✅ Show simulated chart
-            chartContainer.style.display = "block";
+            document.getElementById('botChartContainer').style.display = "block";
             createChart(followers, following, tweets, botScore);
+
+            jokeBox.innerHTML = jokes[Math.floor(Math.random() * jokes.length)];
+            factBox.innerHTML = facts[Math.floor(Math.random() * facts.length)];
         }
 
-        // ✅ BOT ANALYSIS CHART FUNCTION
+        function typeWriterEffect(text, element) {
+            element.innerHTML = "";
+            let index = 0;
+
+            function type() {
+                if (index < text.length) {
+                    element.innerHTML += text.charAt(index);
+                    index++;
+                    setTimeout(type, 40);
+                }
+            }
+            type();
+        }
+
         function createChart(followers, following, tweets, botScore) {
             const ctx = document.getElementById('botChart').getContext('2d');
 
-            if (window.botChart) {
-                window.botChart.destroy();
-            }
+            if (window.botChart) window.botChart.destroy();
 
             window.botChart = new Chart(ctx, {
                 type: 'bar',
@@ -267,7 +314,6 @@
             });
         }
 
-        // ✅ SHARE FUNCTION
         function shareDoctorKarl() {
             if (navigator.share) {
                 navigator.share({
@@ -280,7 +326,6 @@
             }
         }
     </script>
-
 </body>
 
 </html>
