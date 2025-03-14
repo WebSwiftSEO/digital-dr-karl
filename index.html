@@ -400,6 +400,83 @@ self.addEventListener('fetch', event => {
     function closeInfo() {
       document.getElementById('infoModal').style.display = 'none';
     }
+
+    function demoAnalyzeProfile() {
+  const username = document.getElementById('username').value;
+  const resultDiv = document.getElementById('result');
+
+  if (!username) {
+    resultDiv.innerHTML = "<span style='color:red;'>Please enter a username.</span>";
+    return;
+  }
+
+  // ✅ Random stats for the demo
+  const followers = Math.floor(Math.random() * 10000);
+  const following = Math.floor(Math.random() * 5000);
+  const tweets = Math.floor(Math.random() * 1000);
+
+  // ✅ Example bot score logic (update as you like)
+  let botScore = 0;
+  if (followers < 50) botScore += 30;
+  if (following > 1000) botScore += 30;
+  if (tweets < 10) botScore += 20;
+  // Random fudge factor for fun
+  botScore += Math.floor(Math.random() * 20);
+
+  // ✅ Result output
+  resultDiv.innerHTML = `
+    <p><strong>Username:</strong> ${username}</p>
+    <p><strong>Followers:</strong> ${followers} Gazillion</p>
+    <p><strong>Following:</strong> ${following}</p>
+    <p><strong>Total Tweets:</strong> ${tweets}</p>
+    <p><strong>🤖 Bot Probability:</strong> ${botScore}%</p>
+    <p>${botScore > 60 ? '⚔️ Bot Alert!' : '✅ Looks Human!'}</p>
+  `;
+
+  // ✅ Show chart container + refresh chart with matching data
+  document.getElementById('botChartContainer').style.display = 'block';
+  createChart(followers, following, tweets, botScore);
+
+  // ✅ Refresh joke when Analyze is clicked
+  document.getElementById('jokeBox').innerText = jokes[Math.floor(Math.random() * jokes.length)];
+  }
+
+  let botChart = null; // Global declaration to manage the chart
+
+function createChart(followers, following, tweets, botScore) {
+  const ctx = document.getElementById('botChart').getContext('2d');
+
+  // ✅ Always destroy old chart to prevent duplication issues
+  if (botChart !== null) {
+    botChart.destroy();
+  }
+
+  botChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Followers', 'Following', 'Tweets', 'Bot Score'],
+      datasets: [{
+        label: 'Bot Analysis',
+        data: [followers, following, tweets, botScore], // ✅ Matches exactly
+        backgroundColor: [
+          'green',
+          'gold',
+          'gold',
+          botScore > 60 ? 'red' : 'green'
+        ]
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+  }
+
   </script>
 
 </body>
