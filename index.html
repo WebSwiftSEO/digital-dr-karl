@@ -20,20 +20,11 @@
       5. Offline mode enabled with Service Worker.
   =========================================================== -->
 
-  <!-- ✅ Favicon (Optional - can be removed or replaced later) -->
-  <link rel="icon" type="image/png" href="">
-
-  <!-- ✅ PWA Setup -->
   <meta name="theme-color" content="#FFD700" />
-  <link rel="apple-touch-icon" href="">
-
-  <!-- ✅ Open Graph + Twitter -->
-  <meta property="og:title" content="Digital Dr Karl 🧑‍🔬">
-  <meta property="og:description" content="Analyze X profiles, detect bots, and laugh while learning!">
-  <meta property="og:image" content="">
+  <meta property="og:title" content="Digital Dr Karl 🧑‍🔬" />
+  <meta property="og:description" content="Analyze X profiles, detect bots, and laugh while learning!" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- ✅ Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
@@ -131,6 +122,7 @@
       border-radius: 12px;
       box-shadow: 0 0 15px #0f0;
       font-size: 16px;
+      min-height: 50px;
     }
 
     footer {
@@ -140,7 +132,6 @@
       color: gray;
     }
 
-    /* ✅ Modal Styles */
     .modal {
       display: none;
       position: fixed;
@@ -193,13 +184,12 @@
       <canvas id="botChart"></canvas>
     </div>
 
-    <div class="joke-box" id="jokeBox">Ready for a laugh? Click Analyze!</div>
+    <div class="joke-box" id="jokeBox">Click Analyze for a random science joke!</div>
 
     <button class="share-btn" id="installBtn">📲 Install Digital Dr Karl</button>
     <button class="share-btn" onclick="shareDoctorKarl()">📤 Share Digital Dr Karl</button>
     <button class="share-btn" onclick="openInfo()">ℹ️ Info & Features</button>
 
-    <!-- ✅ Social Links Simplified -->
     <div class="social-links">
       <a href="https://twitter.com/DoctorKarl" target="_blank">Follow Dr Karl on Twitter</a>
       <a href="https://www.facebook.com/DrKarl/" target="_blank">Follow Dr Karl on Facebook</a>
@@ -212,7 +202,6 @@
     </footer>
   </div>
 
-  <!-- ✅ Info Modal -->
   <div id="infoModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeInfo()">&times;</span>
@@ -236,7 +225,6 @@
     </div>
   </div>
 
-  <!-- ✅ Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
@@ -300,7 +288,8 @@
       document.getElementById('botChartContainer').style.display = 'block';
       createChart(followers, following, tweets, botScore);
 
-      jokeBox.innerHTML = jokes[Math.floor(Math.random() * jokes.length)];
+      const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+      jokeBox.innerText = randomJoke;
     }
 
     function createChart(followers, following, tweets, botScore) {
