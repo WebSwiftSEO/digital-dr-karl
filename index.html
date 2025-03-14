@@ -6,23 +6,26 @@
   <title>Digital Dr Karl 🧑‍🔬</title>
 
   <!-- =====================================================
-      ✅ DIGITAL DR KARL DEMO WEBSITE - DEV INSTRUCTIONS ✅
+      ✅ DIGITAL DR KARL DEMO WEBSITE - FINAL VERSION ✅
   ===========================================================
-      1. This is a DEMO with random bot analysis + science jokes.
+      1. Random bot analysis + science jokes.
       2. Clone/Fork the project: https://github.com/WebSwiftSEO?tab=repositories
       3. Install as PWA on Android/iPhone.
-      4. Offline support via Service Worker (service-worker.js included).
+      4. Offline support via Service Worker.
   =========================================================== -->
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#FFD700" />
   <meta property="og:title" content="Digital Dr Karl 🧑‍🔬" />
   <meta property="og:description" content="Analyze X profiles, detect bots, and laugh while learning!" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Link PWA Manifest -->
+  <!-- ✅ Favicon (Base64 Image, Fully Working) -->
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB10lEQVQ4T6XTsUvDUBQH8N/MOpNgpiAqJ1uKCMEIorR2djoogUifYOIjh7sbfYyCBBKImXKhAJWBo2hJSWkPBsIUECS7zbt5zvG/gGhsaSOyMjONjDnqGHb7PB9lgkZxNR4+3CwIDj9fK+CZbEwcrlcaV5fsHp6Gl+u19YoN+vkP2wsr6Xx03HvjkFLrUSr1gYSAcf12IYWWF5XLAHFfCeVx+k1I3Ts4h9y8x9BDb39DC27RH0HDAd0uLJsy1PKhKplAqlhAoUqFfH5+EZmLiLgWbB4hFsVDI5XFEUurXxWzJ/2CQyYAVBdCGC+jf1CwFxXMf0VAHOJ1rZSEi+0dpzAWAxOMQq9UKLxeB+yTkfQjqNR9vn8W8L1eq1Wq1TJN53mZiLvu9EnOGQ8FkIur1eqFCshmMqlyIrDZn1eq9VKt9skfAbBGf+AdrxL2XY/rsjAAAAAElFTkSuQmCC" />
+
+  <!-- ✅ PWA Manifest -->
   <link rel="manifest" href="manifest.json" />
 
-  <!-- Register the Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
@@ -54,17 +57,6 @@
     h1 {
       text-shadow: 0 0 15px gold, 0 0 15px green;
       font-size: 30px;
-      animation: glow 2s infinite alternate;
-    }
-
-    @keyframes glow {
-      from {
-        text-shadow: 0 0 10px gold, 0 0 20px gold;
-      }
-
-      to {
-        text-shadow: 0 0 20px green, 0 0 30px green;
-      }
     }
 
     input,
@@ -78,13 +70,6 @@
       font-size: 18px;
       text-align: center;
       border-radius: 8px;
-      box-shadow: 0 0 12px green, 0 0 12px gold;
-    }
-
-    button:hover {
-      background: linear-gradient(45deg, gold, green);
-      color: black;
-      box-shadow: 0 0 20px gold, 0 0 20px green;
     }
 
     .share-btn {
@@ -95,7 +80,6 @@
       font-weight: bold;
       background: linear-gradient(45deg, green, gold);
       border-radius: 12px;
-      box-shadow: 0 0 20px green, 0 0 20px gold;
       cursor: pointer;
     }
 
@@ -129,46 +113,10 @@
       font-size: 14px;
       color: gray;
     }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.8);
-    }
-
-    .modal-content {
-      background-color: #111;
-      margin: 10% auto;
-      padding: 20px;
-      border: 2px solid #FFD700;
-      width: 80%;
-      color: #FFD700;
-      border-radius: 12px;
-      box-shadow: 0 0 20px #FFD700;
-    }
-
-    .close-btn {
-      color: red;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .close-btn:hover {
-      color: #fff;
-    }
   </style>
 </head>
 
 <body>
-
   <div class="container">
     <h1>Digital Dr Karl 🧑‍🔬</h1>
     <p>Analyze X profiles, detect bots, and have a laugh! 🤖⚡</p>
@@ -199,27 +147,17 @@
     </footer>
   </div>
 
-  <!-- Info Modal -->
-  <div id="infoModal" class="modal">
+  <div id="infoModal" class="modal" style="display:none;">
     <div class="modal-content">
       <span class="close-btn" onclick="closeInfo()">&times;</span>
       <h2>About Digital Dr Karl 🧑‍🔬</h2>
-      <p><strong>What is this?</strong><br>Analyze X (Twitter) profiles for bots and laugh along the way with Dr Karl’s wisdom and humour.</p>
-      <p><strong>Features:</strong></p>
+      <p><strong>What is this?</strong><br>Analyze X profiles for bots and laugh with Dr Karl’s science jokes!</p>
       <ul style="text-align:left;">
         <li>✅ X Profile Analyzer</li>
         <li>✅ Bot Probability Score</li>
         <li>✅ Science Jokes!</li>
-        <li>✅ PWA - Installable + Works Offline</li>
+        <li>✅ PWA - Installable + Offline</li>
       </ul>
-      <p><strong>Install:</strong></p>
-      <ul style="text-align:left;">
-        <li>📲 Android: Tap "Install" button</li>
-        <li>📲 iPhone: Tap Share → "Add to Home Screen"</li>
-      </ul>
-      <p><strong>Clone the code:</strong><br>
-        <a href="https://github.com/WebSwiftSEO?tab=repositories" target="_blank" style="color:gold;">WebSwiftSEO Repos</a>
-      </p>
     </div>
   </div>
 
@@ -234,9 +172,7 @@
       "Schrodinger's cat walks into a bar... and doesn’t.",
       "What did the 0 say to the 8? Nice belt!",
       "How does NASA organize their parties? They planet.",
-      "Why did the photon refuse to check its luggage? It was traveling light!",
-      "If you’re not part of the solution, you’re part of the precipitate.",
-      "Why are chemists great at solving problems? They have all the solutions!"
+      "Why did the photon refuse to check its luggage? It was traveling light!"
     ];
 
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -253,8 +189,7 @@
     });
 
     window.onload = () => {
-      const jokeBox = document.getElementById('jokeBox');
-      jokeBox.innerText = jokes[Math.floor(Math.random() * jokes.length)];
+      document.getElementById('jokeBox').innerText = jokes[Math.floor(Math.random() * jokes.length)];
     };
 
     function demoAnalyzeProfile() {
@@ -277,7 +212,7 @@
         <p><strong>Following:</strong> ${following}</p>
         <p><strong>Total Tweets:</strong> ${tweets}</p>
         <p><strong>🤖 Bot Probability:</strong> ${botScore}%</p>
-        <p>${botScore > 60 ? '⚔️ Bot Alert! Might be Skynet!' : '✅ Looks Human!'}</p>
+        <p>${botScore > 60 ? '⚔️ Bot Alert!' : '✅ Looks Human!'}</p>
       `;
 
       document.getElementById('botChartContainer').style.display = 'block';
