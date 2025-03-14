@@ -1,20 +1,24 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Digital Dr Karl 🧑‍🔬</title>
 
-    <!-- SEO Metadata -->
+    <!-- ✅ SEO Metadata: Edit these tags to improve your search engine visibility -->
     <meta name="description" content="Digital Dr Karl – Analyze X profiles and detect bots using AI and the X API! 🤖⚡">
     <meta name="keywords" content="Digital Dr Karl, X bot detector, X profile analyzer, AI insights, bot detection, Dr Karl, Aussie humor">
+
+    <!-- ✅ Open Graph for social sharing -->
     <meta property="og:title" content="Digital Dr Karl 🧑‍🔬">
     <meta property="og:description" content="Analyze X profiles with Digital Dr Karl and expose bots using real data.">
     <meta name="twitter:card" content="summary_large_image">
 
-    <!-- Chart.js for Graphs -->
+    <!-- ✅ Chart.js library for data visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        /* ✅ BASIC STYLING: Edit colors/fonts as needed */
         body {
             background-color: black;
             color: gold;
@@ -38,7 +42,8 @@
             font-size: 28px;
         }
 
-        input, button {
+        input,
+        button {
             width: 85%;
             padding: 12px;
             margin: 15px 0;
@@ -92,44 +97,89 @@
             color: white;
             box-shadow: 0px 0px 25px gold, 0px 0px 25px green;
         }
+
+        /* ✅ Footer Style */
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 14px;
+            color: gray;
+        }
     </style>
 </head>
+
 <body>
+
+    <!-- ✅ MAIN CONTAINER -->
     <div class="container">
         <h1>Digital Dr Karl 🧑‍🔬</h1>
         <p>Analyze X profiles, detect bots, and have a laugh! 🤖⚡</p>
+
+        <!-- ✅ Input field for username / X profile URL -->
         <input type="text" id="username" placeholder="Enter X Username or URL">
+
+        <!-- ✅ Analyze Button -->
         <button onclick="analyzeProfile()">Analyze</button>
+
+        <!-- ✅ Result will display here -->
         <div id="result"></div>
+
+        <!-- ✅ Bot Analysis Chart -->
         <div id="botChartContainer">
             <canvas id="botChart"></canvas>
         </div>
     </div>
 
+    <!-- ✅ Share Button -->
     <button class="share-btn" onclick="shareDoctorKarl()">📤 Share Digital Dr Karl</button>
 
+    <!-- ✅ FOOTER SECTION -->
+    <footer>
+        <!-- ✅ Link to clone the repo and instructions -->
+        <p>🚀 Clone this project on GitHub:  
+            <a href="https://github.com/WebSwiftSEO?tab=repositories" target="_blank" style="color:gold;">
+                WebSwiftSEO Repositories
+            </a>
+        </p>
+        <p>🔧 Full setup instructions are inside the <strong>index.html</strong> code comments!</p>
+        <p>📜 Customize the proxy and token variables in the script below to make it work on your site.</p>
+    </footer>
+
     <script>
-        // ✅ CHANGE THIS TO YOUR GLITCH PROXY URL
+        /* 
+        ✅ DIGITAL DR KARL - INSTRUCTIONS
+        1. Set your proxy URL (Glitch or other CORS proxy).
+        2. Add your X API Bearer Token.
+        3. Upload to GitHub Pages / Cloudflare Pages / Netlify or other host.
+        4. Test and deploy!
+        */
+
+        // ✅ SET YOUR PROXY URL (Glitch or Cloudflare Worker recommended)
         const proxyURL = 'https://wooden-canyon-lunch.glitch.me/';
 
-        // ✅ ADD YOUR X API BEARER TOKEN HERE
-        const bearerToken = 'AAAAAAAAAAAAAAAAAAAAAK%2BezQEAAAAAor5aL3gMsXWug1ES5NGnJwOsBrk%3DgMTyJpMvnLHyHAfGSnqeEM3O7m6tQCLdHMAAkTQGEvVjWIPQxJ';
+        // ✅ ADD YOUR X (Twitter) API BEARER TOKEN
+        const bearerToken = 'PASTE_YOUR_BEARER_TOKEN_HERE';
 
+        // ✅ MAIN ANALYSIS FUNCTION
         async function analyzeProfile() {
             const usernameInput = document.getElementById('username').value;
             const resultDiv = document.getElementById('result');
             const chartContainer = document.getElementById('botChartContainer');
 
+            // ✅ VALIDATION
             if (!usernameInput) {
                 resultDiv.innerHTML = "<span style='color: red;'>Please enter a username.</span>";
                 return;
             }
 
+            // ✅ CLEAN UP THE USERNAME
             const cleanUsername = usernameInput.replace(/^https?:\/\/(www\.)?(x\.com|twitter\.com)\//, '').trim();
 
             try {
+                // ✅ X API endpoint for user data
                 const apiUrl = `https://api.x.com/2/users/by/username/${cleanUsername}?user.fields=public_metrics,created_at`;
 
+                // ✅ Fetch data via proxy
                 const response = await fetch(`${proxyURL}${apiUrl}`, {
                     headers: {
                         'Authorization': `Bearer ${bearerToken}`
@@ -138,19 +188,23 @@
 
                 const data = await response.json();
 
+                // ✅ HANDLE ERRORS
                 if (!data.data) {
                     resultDiv.innerHTML = `<span style="color: red;">❌ User not found or API error.</span>`;
                     return;
                 }
 
+                // ✅ EXTRACT METRICS
                 const { public_metrics, created_at } = data.data;
 
+                // ✅ BOT SCORE LOGIC - Edit as you like
                 let botScore = 0;
                 if (public_metrics.followers_count < 50) botScore += 30;
                 if (public_metrics.following_count > 1000) botScore += 30;
                 if (public_metrics.tweet_count < 10) botScore += 20;
                 if (new Date(created_at).getFullYear() > 2023) botScore += 20;
 
+                // ✅ DISPLAY RESULTS
                 resultDiv.innerHTML = `
                     <p><strong>Username:</strong> ${data.data.username}</p>
                     <p><strong>Followers:</strong> ${public_metrics.followers_count}</p>
@@ -161,6 +215,7 @@
                     <p>${botScore > 60 ? '⚔️ Bot Alert!' : '✅ Looks Human!'}</p>
                 `;
 
+                // ✅ CREATE CHART
                 chartContainer.style.display = "block";
                 createChart(public_metrics.followers_count, public_metrics.following_count, public_metrics.tweet_count, botScore);
 
@@ -170,9 +225,16 @@
             }
         }
 
+        // ✅ BOT ANALYSIS CHART FUNCTION
         function createChart(followers, following, tweets, botScore) {
             const ctx = document.getElementById('botChart').getContext('2d');
-            new Chart(ctx, {
+
+            // ✅ Destroy existing chart before creating a new one (avoid duplicates)
+            if (window.botChart) {
+                window.botChart.destroy();
+            }
+
+            window.botChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Followers', 'Following', 'Tweets', 'Bot Score'],
@@ -191,6 +253,7 @@
             });
         }
 
+        // ✅ SHARE BUTTON FUNCTION
         function shareDoctorKarl() {
             if (navigator.share) {
                 navigator.share({
@@ -203,5 +266,7 @@
             }
         }
     </script>
+
 </body>
+
 </html>
