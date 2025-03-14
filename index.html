@@ -55,7 +55,96 @@
   </script>
 
   <style>
-    /* [STYLES HERE - SAME AS BEFORE FOR SIMPLICITY] */
+    body {
+      background-color: black;
+      color: gold;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border: 3px solid gold;
+      border-radius: 12px;
+      background: black;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 30px rgba(0, 255, 0, 0.8);
+    }
+
+    h1 {
+      text-shadow: 0 0 15px gold, 0 0 15px green;
+      font-size: 30px;
+    }
+
+    input,
+    button {
+      width: 85%;
+      padding: 12px;
+      margin: 15px 0;
+      border: 2px solid gold;
+      background: black;
+      color: gold;
+      font-size: 18px;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    .share-btn {
+      margin-top: 15px;
+      width: 85%;
+      padding: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      background: linear-gradient(45deg, green, gold);
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .joke-box {
+      margin-top: 20px;
+      background: #111;
+      color: #0f0;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #0f0;
+      font-size: 16px;
+      min-height: 50px;
+    }
+
+    .social-links {
+      margin-top: 40px;
+    }
+
+    .social-links a {
+      display: block;
+      font-size: 22px;
+      color: red;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .modal {
+  display: none;
+  position: fixed; /* ✅ Fixed at top of screen */
+  top: 0;          /* ✅ No more under the footer */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 9999;   /* ✅ Stay on top of everything */
+    }
+
+
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      font-size: 14px;
+      color: gray;
+    }
   </style>
 </head>
 
