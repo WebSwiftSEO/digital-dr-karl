@@ -8,16 +8,11 @@
   <!-- =====================================================
       ✅ DIGITAL DR KARL DEMO WEBSITE - DEV INSTRUCTIONS ✅
   ===========================================================
-      1. This demo runs random analysis + science jokes.
-      2. To connect to live API:
-         a) Set up a Cloudflare Worker Proxy.
-         b) Replace demoAnalyzeProfile() with analyzeProfile().
-      3. Clone or fork:
+      1. This is a DEMO with random bot analysis + science jokes.
+      2. No real API calls. To connect API, follow the README:
          👉 https://github.com/WebSwiftSEO?tab=repositories
-      4. Install as PWA:
-         ✅ Android: Tap Install button.
-         ✅ iPhone: Share > Add to Home Screen.
-      5. Offline mode enabled with Service Worker.
+      3. Install as PWA on Android/iPhone.
+      4. Offline support via Service Worker (add service-worker.js).
   =========================================================== -->
 
   <meta name="theme-color" content="#FFD700" />
@@ -184,12 +179,14 @@
       <canvas id="botChart"></canvas>
     </div>
 
-    <div class="joke-box" id="jokeBox">Click Analyze for a random science joke!</div>
+    <!-- ✅ Jokes Display -->
+    <div class="joke-box" id="jokeBox"></div>
 
     <button class="share-btn" id="installBtn">📲 Install Digital Dr Karl</button>
     <button class="share-btn" onclick="shareDoctorKarl()">📤 Share Digital Dr Karl</button>
     <button class="share-btn" onclick="openInfo()">ℹ️ Info & Features</button>
 
+    <!-- ✅ Social Links (No icons) -->
     <div class="social-links">
       <a href="https://twitter.com/DoctorKarl" target="_blank">Follow Dr Karl on Twitter</a>
       <a href="https://www.facebook.com/DrKarl/" target="_blank">Follow Dr Karl on Facebook</a>
@@ -202,6 +199,7 @@
     </footer>
   </div>
 
+  <!-- ✅ Info Modal -->
   <div id="infoModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeInfo()">&times;</span>
@@ -239,7 +237,19 @@
       "How does NASA organize their parties? They planet.",
       "Why did the photon refuse to check its luggage? It was traveling light!",
       "If you’re not part of the solution, you’re part of the precipitate.",
-      "Why are chemists great at solving problems? They have all the solutions!"
+      "Why are chemists great at solving problems? They have all the solutions!",
+      "What do you call a periodic table with gold on it? Au-some!",
+      "Why don’t programmers like nature? Too many bugs.",
+      "Why was the math book sad? It had too many problems.",
+      "What did the biologist wear to impress their date? Designer genes.",
+      "Why can’t you trust an atom? Because they make up everything!",
+      "What does a physicist say when meditating? Ohm... Ohm...",
+      "How does the moon cut his hair? Eclipse it.",
+      "Why was the equal sign so humble? It knew it wasn't less than or greater than anyone else.",
+      "What is a tornado’s favorite game? Twister!",
+      "How do you organize a space party? You planet.",
+      "What is a computer’s favorite snack? Microchips!",
+      "How do you throw a space party? You planet!"
     ];
 
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -261,10 +271,16 @@
       }, 4000);
     }
 
+    // ✅ Show random joke on page load
+    window.onload = () => {
+      const jokeBox = document.getElementById('jokeBox');
+      const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+      jokeBox.innerText = randomJoke;
+    };
+
     function demoAnalyzeProfile() {
       const username = document.getElementById('username').value;
       const resultDiv = document.getElementById('result');
-      const jokeBox = document.getElementById('jokeBox');
 
       if (!username) {
         resultDiv.innerHTML = "<span style='color:red;'>Please enter a username.</span>";
@@ -287,15 +303,12 @@
 
       document.getElementById('botChartContainer').style.display = 'block';
       createChart(followers, following, tweets, botScore);
-
-      const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-      jokeBox.innerText = randomJoke;
     }
 
     function createChart(followers, following, tweets, botScore) {
       const ctx = document.getElementById('botChart').getContext('2d');
 
-      if (botChart) {
+      if (botChart !== null) {
         botChart.destroy();
       }
 
