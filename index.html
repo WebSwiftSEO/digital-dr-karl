@@ -20,6 +20,10 @@
   <meta property="og:description" content="Analyze X profiles, detect bots, and laugh while learning!" />
   <meta name="twitter:card" content="summary_large_image" />
 
+  <!-- ✅ REMOVE ALL IMAGES (Base64 Errors FIXED) -->
+  <link rel="icon" href=""> <!-- No more Base64 favicon -->
+  <meta property="og:image" content=""> <!-- No more Base64 OpenGraph image -->
+
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
@@ -96,19 +100,6 @@
       cursor: pointer;
     }
 
-    .social-links {
-      margin-top: 40px;
-    }
-
-    .social-links a {
-      display: block;
-      font-size: 22px;
-      color: red;
-      text-decoration: none;
-      font-weight: bold;
-      margin: 10px 0;
-    }
-
     .joke-box {
       margin-top: 20px;
       background: #111;
@@ -125,41 +116,6 @@
       padding: 20px;
       font-size: 14px;
       color: gray;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.8);
-    }
-
-    .modal-content {
-      background-color: #111;
-      margin: 10% auto;
-      padding: 20px;
-      border: 2px solid #FFD700;
-      width: 80%;
-      color: #FFD700;
-      border-radius: 12px;
-      box-shadow: 0 0 20px #FFD700;
-    }
-
-    .close-btn {
-      color: red;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .close-btn:hover {
-      color: #fff;
     }
   </style>
 </head>
@@ -179,51 +135,16 @@
       <canvas id="botChart"></canvas>
     </div>
 
-    <!-- ✅ Jokes Display -->
     <div class="joke-box" id="jokeBox"></div>
 
     <button class="share-btn" id="installBtn">📲 Install Digital Dr Karl</button>
     <button class="share-btn" onclick="shareDoctorKarl()">📤 Share Digital Dr Karl</button>
-    <button class="share-btn" onclick="openInfo()">ℹ️ Info & Features</button>
-
-    <!-- ✅ Social Links (No icons) -->
-    <div class="social-links">
-      <a href="https://twitter.com/DoctorKarl" target="_blank">Follow Dr Karl on Twitter</a>
-      <a href="https://www.facebook.com/DrKarl/" target="_blank">Follow Dr Karl on Facebook</a>
-      <a href="https://www.instagram.com/doctorkarl/" target="_blank">Follow Dr Karl on Instagram</a>
-    </div>
 
     <footer>
       🚀 Clone this project on GitHub:<br>
       <a href="https://github.com/WebSwiftSEO?tab=repositories" target="_blank" style="color:gold;">WebSwiftSEO Repositories</a>
     </footer>
   </div>
-
-  <!-- ✅ Info Modal -->
-  <div id="infoModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeInfo()">&times;</span>
-      <h2>About Digital Dr Karl 🧑‍🔬</h2>
-      <p><strong>What is this?</strong><br>Analyze X (Twitter) profiles for bots and laugh along the way with Dr Karl’s wisdom and humour.</p>
-      <p><strong>Features:</strong></p>
-      <ul style="text-align:left;">
-        <li>✅ X Profile Analyzer</li>
-        <li>✅ Bot Probability Score</li>
-        <li>✅ Science Jokes!</li>
-        <li>✅ PWA - Installable + Works Offline</li>
-      </ul>
-      <p><strong>Install:</strong></p>
-      <ul style="text-align:left;">
-        <li>📲 Android: Tap "Install" button</li>
-        <li>📲 iPhone: Tap Share → "Add to Home Screen"</li>
-      </ul>
-      <p><strong>Clone the code:</strong><br>
-        <a href="https://github.com/WebSwiftSEO?tab=repositories" target="_blank" style="color:gold;">WebSwiftSEO Repos</a>
-      </p>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
     let deferredPrompt;
@@ -237,19 +158,7 @@
       "How does NASA organize their parties? They planet.",
       "Why did the photon refuse to check its luggage? It was traveling light!",
       "If you’re not part of the solution, you’re part of the precipitate.",
-      "Why are chemists great at solving problems? They have all the solutions!",
-      "What do you call a periodic table with gold on it? Au-some!",
-      "Why don’t programmers like nature? Too many bugs.",
-      "Why was the math book sad? It had too many problems.",
-      "What did the biologist wear to impress their date? Designer genes.",
-      "Why can’t you trust an atom? Because they make up everything!",
-      "What does a physicist say when meditating? Ohm... Ohm...",
-      "How does the moon cut his hair? Eclipse it.",
-      "Why was the equal sign so humble? It knew it wasn't less than or greater than anyone else.",
-      "What is a tornado’s favorite game? Twister!",
-      "How do you organize a space party? You planet.",
-      "What is a computer’s favorite snack? Microchips!",
-      "How do you throw a space party? You planet!"
+      "Why are chemists great at solving problems? They have all the solutions!"
     ];
 
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -265,17 +174,8 @@
       }
     });
 
-    if (navigator.userAgent.match(/(iPhone|iPad|iPod)/i)) {
-      setTimeout(() => {
-        alert('📲 Tap Share in Safari, then "Add to Home Screen" to install Digital Dr Karl!');
-      }, 4000);
-    }
-
-    // ✅ Show random joke on page load
     window.onload = () => {
-      const jokeBox = document.getElementById('jokeBox');
-      const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-      jokeBox.innerText = randomJoke;
+      document.getElementById('jokeBox').innerText = jokes[Math.floor(Math.random() * jokes.length)];
     };
 
     function demoAnalyzeProfile() {
@@ -287,72 +187,15 @@
         return;
       }
 
-      const followers = Math.floor(Math.random() * 10000);
-      const following = Math.floor(Math.random() * 5000);
-      const tweets = Math.floor(Math.random() * 1000);
-      const botScore = Math.floor(Math.random() * 100);
-
       resultDiv.innerHTML = `
         <p><strong>Username:</strong> ${username}</p>
-        <p><strong>Followers:</strong> ${followers} Gazillion</p>
-        <p><strong>Following:</strong> ${following}</p>
-        <p><strong>Total Tweets:</strong> ${tweets}</p>
-        <p><strong>🤖 Bot Probability:</strong> ${botScore}%</p>
-        <p>${botScore > 60 ? '⚔️ Bot Alert! Might be Skynet!' : '✅ Looks Human!'}</p>
+        <p><strong>Followers:</strong> ${Math.floor(Math.random() * 10000)} Gazillion</p>
+        <p><strong>Following:</strong> ${Math.floor(Math.random() * 5000)}</p>
+        <p><strong>Total Tweets:</strong> ${Math.floor(Math.random() * 1000)}</p>
       `;
-
-      document.getElementById('botChartContainer').style.display = 'block';
-      createChart(followers, following, tweets, botScore);
-    }
-
-    function createChart(followers, following, tweets, botScore) {
-      const ctx = document.getElementById('botChart').getContext('2d');
-
-      if (botChart !== null) {
-        botChart.destroy();
-      }
-
-      botChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Followers', 'Following', 'Tweets', 'Bot Score'],
-          datasets: [{
-            label: 'Bot Analysis',
-            data: [followers, following, tweets, botScore],
-            backgroundColor: ['green', 'gold', 'gold', botScore > 60 ? 'red' : 'green']
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    }
-
-    function shareDoctorKarl() {
-      if (navigator.share) {
-        navigator.share({
-          title: "Digital Dr Karl",
-          text: "Check out this X profile analyzer!",
-          url: window.location.href
-        }).catch(err => console.log('❌ Share failed:', err));
-      } else {
-        alert("Sharing not supported on this browser.");
-      }
-    }
-
-    function openInfo() {
-      document.getElementById('infoModal').style.display = 'block';
-    }
-
-    function closeInfo() {
-      document.getElementById('infoModal').style.display = 'none';
     }
   </script>
+
 </body>
 
 </html>
