@@ -1,38 +1,21 @@
-const cacheName = 'digital-dr-karl-v1';
+const cacheName = 'drkarl-pwa-v1';
 const assets = [
-  './',
-  './index.html'
+    './',
+    './index.html'
 ];
 
-// Install
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(cacheName).then(cache => {
-      return cache.addAll(assets);
-    })
-  );
-});
-
-// Activate
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
-        keys.map(key => {
-          if (key !== cacheName) {
-            return caches.delete(key);
-          }
+self.addEventListener('install', (event) => {
+    console.log('[Service Worker] Installing...');
+    event.waitUntil(
+        caches.open(cacheName).then(cache => {
+            console.log('[Service Worker] Caching app shell');
+            return cache.addAll(assets);
         })
-      );
-    })
-  );
+    );
 });
 
-// Fetch
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then(res => {
-      return res || fetch(e.request);
-    })
-  );
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        caches.match(event.request).then(response => response || fetch(event.request))
+    );
 });
