@@ -2,310 +2,342 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Digital Dr Karl 🧑‍🔬</title>
+  <meta charset="UTF-8" />
+  <title>Digital Dr Karl 🧑‍🔬</title>
 
-    <!-- ==========================
-    ✅ DEV INSTRUCTIONS
-    ==========================
-    1. DEMO site = Random Bot Analysis + Science Humor
-    2. For real API:
-        - Use Cloudflare Proxy (setup instructions above)
-        - Replace demoAnalyzeProfile() with analyzeProfile()
-    ========================== -->
+  <!-- ==========================
+  ✅ DEV INSTRUCTIONS
+  ==========================
+  1. DEMO site = Random Bot Analysis + Science Humor
+  2. For real API:
+      - Use Cloudflare Proxy (setup instructions below)
+      - Replace demoAnalyzeProfile() with analyzeProfile()
+  3. Cloudflare Proxy Example:
+      addEventListener('fetch', event => {
+          event.respondWith(fetch('https://api.twitter.com/...', {
+              headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
+          }));
+      });
+  ========================== -->
 
-    <!-- Base64 Favicon -->
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBOR...">
+  <!-- ✅ Base64 Favicon -->
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...YOUR_FAVICON_BASE64..." />
 
-    <!-- SEO Metadata -->
-    <meta name="description" content="Digital Dr Karl – Analyze X profiles, detect bots, and laugh while learning!">
-    <meta property="og:title" content="Digital Dr Karl 🧑‍🔬">
-    <meta property="og:description" content="Analyze X profiles, detect bots, and laugh while learning!">
-    <meta name="twitter:card" content="summary_large_image">
+  <!-- ✅ Open Graph + Twitter + Touch Icon -->
+  <meta name="theme-color" content="#FFD700" />
+  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...YOUR_ICON_192_BASE64..." />
+  <meta property="og:title" content="Digital Dr Karl 🧑‍🔬" />
+  <meta property="og:description" content="Analyze X profiles, detect bots, and laugh while learning!" />
+  <meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...YOUR_SOCIAL_PREVIEW_BASE64..." />
+  <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- ✅ Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('✅ Service Worker Registered'))
+        .catch(err => console.log('❌ Service Worker Error:', err));
+    }
+  </script>
 
-    <style>
-        body {
-            background-color: #000;
-            color: #FFD700;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
+  <style>
+    body {
+      background-color: #000;
+      color: #FFD700;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
 
-        .container {
-            width: 90%;
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            border: 3px solid #FFD700;
-            border-radius: 12px;
-            background: black;
-            box-shadow: 0px 0px 30px rgba(255, 215, 0, 0.8), 0px 0px 30px rgba(0, 255, 0, 0.8);
-            animation: fadeIn 1s ease-in;
-        }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border: 3px solid #FFD700;
+      border-radius: 12px;
+      background: black;
+      box-shadow: 0px 0px 30px rgba(255, 215, 0, 0.8), 0px 0px 30px rgba(0, 255, 0, 0.8);
+      animation: fadeIn 1s ease-in;
+    }
 
-        h1 {
-            text-shadow: 0px 0px 15px #FFD700, 0px 0px 15px #00FF00;
-            font-size: 30px;
-            animation: glow 2s infinite alternate;
-        }
+    h1 {
+      text-shadow: 0px 0px 15px #FFD700, 0px 0px 15px #00FF00;
+      font-size: 30px;
+      animation: glow 2s infinite alternate;
+    }
 
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700;
-            }
-            to {
-                text-shadow: 0 0 20px #00FF00, 0 0 30px #00FF00;
-            }
-        }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700; }
+      to { text-shadow: 0 0 20px #00FF00, 0 0 30px #00FF00; }
+    }
 
-        input, button {
-            width: 80%;
-            padding: 12px;
-            margin: 15px 0;
-            border: 2px solid #FFD700;
-            background: black;
-            color: #FFD700;
-            font-size: 18px;
-            text-align: center;
-            border-radius: 8px;
-            outline: none;
-            box-shadow: 0px 0px 12px #00FF00, 0px 0px 12px #FFD700;
-            transition: 0.3s;
-        }
+    input, button {
+      width: 80%;
+      padding: 12px;
+      margin: 15px 0;
+      border: 2px solid #FFD700;
+      background: black;
+      color: #FFD700;
+      font-size: 18px;
+      text-align: center;
+      border-radius: 8px;
+      outline: none;
+      box-shadow: 0px 0px 12px #00FF00, 0px 0px 12px #FFD700;
+      transition: 0.3s;
+    }
 
-        button:hover {
-            background: linear-gradient(45deg, #FFD700, #00FF00);
-            color: black;
-            box-shadow: 0px 0px 20px #FFD700, 0px 0px 20px #00FF00;
-        }
+    button:hover {
+      background: linear-gradient(45deg, #FFD700, #00FF00);
+      color: black;
+      box-shadow: 0px 0px 20px #FFD700, 0px 0px 20px #00FF00;
+    }
 
-        .avatar {
-            width: 120px;
-            border-radius: 50%;
-            box-shadow: 0 0 20px #FFD700;
-            margin-bottom: 20px;
-        }
+    .avatar {
+      width: 120px;
+      border-radius: 50%;
+      box-shadow: 0 0 20px #FFD700;
+      margin-bottom: 20px;
+    }
 
-        #result {
-            margin-top: 20px;
-            font-size: 22px;
-            font-weight: bold;
-            min-height: 100px;
-        }
+    #result {
+      margin-top: 20px;
+      font-size: 22px;
+      font-weight: bold;
+      min-height: 100px;
+    }
 
-        #botChartContainer {
-            display: none;
-            width: 100%;
-            max-width: 600px;
-            margin: auto;
-            padding-top: 20px;
-        }
+    #botChartContainer {
+      display: none;
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      padding-top: 20px;
+    }
 
-        .joke-box {
-            margin-top: 20px;
-            width: 90%;
-            background-color: #111;
-            color: #0f0;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0px 0px 15px #0f0;
-            font-size: 16px;
-            animation: fadeIn 1s ease-in;
-        }
+    .joke-box {
+      margin-top: 20px;
+      width: 90%;
+      background-color: #111;
+      color: #0f0;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0px 0px 15px #0f0;
+      font-size: 16px;
+      animation: fadeIn 1s ease-in;
+    }
 
-        .share-btn {
-            margin-top: 30px;
-            width: 80%;
-            padding: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            background: linear-gradient(45deg, #00FF00, #FFD700);
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            color: black;
-            box-shadow: 0px 0px 20px #00FF00, 0px 0px 20px #FFD700;
-        }
+    .share-btn {
+      margin-top: 30px;
+      width: 80%;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      background: linear-gradient(45deg, #00FF00, #FFD700);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      color: black;
+      box-shadow: 0px 0px 20px #00FF00, 0px 0px 20px #FFD700;
+    }
 
-        footer {
-            margin-top: 40px;
-            padding: 20px;
-            font-size: 14px;
-            color: gray;
-        }
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      font-size: 14px;
+      color: gray;
+    }
 
-        .social-links {
-            margin-top: 40px;
-        }
+    .social-links {
+      margin-top: 40px;
+    }
 
-        .social-links a {
-            display: block;
-            font-size: 22px;
-            color: red;
-            margin: 10px 0;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    .social-links a {
+      display: block;
+      font-size: 22px;
+      color: red;
+      margin: 10px 0;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-        .social-links img {
-            width: 20px;
-            height: 20px;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
+    .social-links img {
+      width: 20px;
+      height: 20px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <img src="data:image/png;base64,iVBOR...AVATAR_BASE64" alt="Dr Karl Avatar" class="avatar">
+  <div class="container">
+    <!-- ✅ Dr Karl Avatar -->
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...YOUR_AVATAR_BASE64..." alt="Dr Karl Avatar" class="avatar">
 
-        <h1>Digital Dr Karl 🧑‍🔬</h1>
-        <p>Analyze X profiles, detect bots, and have a laugh! 🤖⚡</p>
+    <h1>Digital Dr Karl 🧑‍🔬</h1>
+    <p>Analyze X profiles, detect bots, and have a laugh! 🤖⚡</p>
 
-        <input type="text" id="username" placeholder="Enter X Username or URL">
+    <!-- Analyze UI -->
+    <input type="text" id="username" placeholder="Enter X Username or URL" />
+    <button onclick="demoAnalyzeProfile()">Analyze</button>
 
-        <button onclick="demoAnalyzeProfile()">Analyze</button>
+    <!-- Results -->
+    <div id="result"></div>
+    <div id="botChartContainer"><canvas id="botChart"></canvas></div>
+    <div class="joke-box" id="jokeBox">Ready for a laugh? Click Analyze!</div>
 
-        <div id="result"></div>
+    <!-- ✅ PWA Install Button -->
+    <button class="share-btn" id="installBtn">📲 Install Digital Dr Karl</button>
 
-        <div id="botChartContainer">
-            <canvas id="botChart"></canvas>
-        </div>
-
-        <div class="joke-box" id="jokeBox">Ready for a laugh? Click Analyze!</div>
-    </div>
-
+    <!-- Share Button -->
     <button class="share-btn" onclick="shareDoctorKarl()">📤 Share Digital Dr Karl</button>
 
-    <!-- Social Links (Red & Large) -->
+    <!-- ✅ Social Links -->
     <div class="social-links">
-        <a href="https://twitter.com/DoctorKarl" target="_blank">
-            <img src="data:image/png;base64,iVBOR...X_ICON_BASE64" alt="Twitter">Follow Dr Karl on Twitter
-        </a>
-        <a href="https://www.facebook.com/DrKarl/" target="_blank">
-            <img src="data:image/png;base64,iVBOR...FB_ICON_BASE64" alt="Facebook">Follow Dr Karl on Facebook
-        </a>
-        <a href="https://www.instagram.com/doctorkarl/" target="_blank">
-            <img src="data:image/png;base64,iVBOR...IG_ICON_BASE64" alt="Instagram">Follow Dr Karl on Instagram
-        </a>
+      <a href="https://twitter.com/DoctorKarl" target="_blank">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...TWITTER_ICON_BASE64..." alt="Twitter" /> Follow Dr Karl on Twitter
+      </a>
+      <a href="https://www.facebook.com/DrKarl/" target="_blank">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...FB_ICON_BASE64..." alt="Facebook" /> Follow Dr Karl on Facebook
+      </a>
+      <a href="https://www.instagram.com/doctorkarl/" target="_blank">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...IG_ICON_BASE64..." alt="Instagram" /> Follow Dr Karl on Instagram
+      </a>
     </div>
 
     <footer>
-        🚀 Clone this project on GitHub:  
-        <a href="https://github.com/WebSwiftSEO?tab=repositories" target="_blank" style="color:gold;">WebSwiftSEO Repositories</a><br>
-        🔧 Setup instructions inside the <strong>index.html</strong> comments above!
+      🚀 Clone this project on GitHub:<br />
+      <a href="https://github.com/WebSwiftSEO?tab=repositories" target="_blank" style="color:gold;">WebSwiftSEO Repositories</a>
     </footer>
 
+    <!-- ✅ JS PWA Install + Functions -->
     <script>
-        const jokes = [
-            "Why don't scientists trust atoms? Because they make up everything!",
-            "Parallel lines have so much in common. Too bad they’ll never meet.",
-            "What do you call an educated tube? A graduated cylinder!",
-            "Schrodinger's cat walks into a bar... and doesn’t.",
-            "What did one DNA strand say to the other? Do these genes make me look fat?",
-            "Two bacteria walk into a bar. The bartender says, 'We don't serve your kind here.' One bacteria replies, 'But we work here!'.",
-            "Why can't you trust an atom? They make up everything!",
-            "Did you hear oxygen went on a date with potassium? It went OK.",
-            "Why are chemists excellent for solving problems? They have all the solutions.",
-            "Never trust a math teacher holding graph paper. They must be plotting something.",
-            "Why did the photon refuse to check its luggage? It was traveling light!",
-            "Why are skeletons so calm? Nothing gets under their skin.",
-            "What's a robot’s favorite music? Heavy metal.",
-            "I told a joke about a pencil once... it had no point.",
-            "How do you know the moon is going broke? It's down to its last quarter.",
-            "If you’re not part of the solution, you’re part of the precipitate.",
-            "How does NASA organize their parties? They planet.",
-            "What did the 0 say to the 8? Nice belt!",
-            "Did you hear about the neutron who was arrested? He was released without charge.",
-            "What’s a computer’s favorite snack? Microchips!"
-        ];
+      const jokes = [
+        "Why don't scientists trust atoms? Because they make up everything!",
+        "Parallel lines have so much in common. Too bad they’ll never meet.",
+        "What do you call an educated tube? A graduated cylinder!",
+        "Schrodinger's cat walks into a bar... and doesn’t.",
+        "What did one DNA strand say to the other? Do these genes make me look fat?",
+        "Two bacteria walk into a bar. 'We work here!'",
+        "Did you hear oxygen went on a date with potassium? It went OK.",
+        "Why are chemists excellent for solving problems? They have all the solutions.",
+        "Never trust a math teacher holding graph paper. They must be plotting something.",
+        "Why did the photon refuse to check its luggage? It was traveling light!",
+        "Why are skeletons so calm? Nothing gets under their skin.",
+        "What's a robot’s favorite music? Heavy metal.",
+        "I told a joke about a pencil once... it had no point.",
+        "How do you know the moon is going broke? It's down to its last quarter.",
+        "If you’re not part of the solution, you’re part of the precipitate.",
+        "How does NASA organize their parties? They planet.",
+        "What did the 0 say to the 8? Nice belt!",
+        "Did you hear about the neutron who was arrested? He was released without charge.",
+        "What’s a computer’s favorite snack? Microchips!",
+        "Australia is wider than the moon!"
+      ];
 
-        function demoAnalyzeProfile() {
-            const username = document.getElementById('username').value;
-            const resultDiv = document.getElementById('result');
-            const jokeBox = document.getElementById('jokeBox');
+      let deferredPrompt;
+      const installBtn = document.getElementById('installBtn');
 
-            if (!username) {
-                resultDiv.innerHTML = "<span style='color:red;'>Please enter a username.</span>";
-                return;
-            }
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'block';
 
-            const followers = Math.floor(Math.random() * 10000);
-            const following = Math.floor(Math.random() * 5000);
-            const tweets = Math.floor(Math.random() * 1000);
-            const botScore = Math.floor(Math.random() * 100);
-
-            const followersGazillion = `${followers} Gazillion`;
-
-            resultDiv.innerHTML = `
-                <p><strong>Username:</strong> ${username}</p>
-                <p><strong>Followers:</strong> ${followersGazillion}</p>
-                <p><strong>Following:</strong> ${following}</p>
-                <p><strong>Total Tweets:</strong> ${tweets}</p>
-                <p><strong>🤖 Bot Probability:</strong> ${botScore}%</p>
-                <p>${botScore > 60 ? '⚔️ Bot Alert! Might be Skynet!' : '✅ Looks Human! Probably loves science!'}</p>
-            `;
-
-            document.getElementById('botChartContainer').style.display = "block";
-            createChart(followers, following, tweets, botScore);
-
-            jokeBox.innerHTML = jokes[Math.floor(Math.random() * jokes.length)];
-        }
-
-        function createChart(followers, following, tweets, botScore) {
-            const ctx = document.getElementById('botChart').getContext('2d');
-
-            if (window.botChart) window.botChart.destroy();
-
-            window.botChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Followers', 'Following', 'Tweets', 'Bot Score'],
-                    datasets: [{
-                        label: 'Bot Analysis',
-                        data: [followers, following, tweets, botScore],
-                        backgroundColor: ['green', 'gold', 'gold', botScore > 60 ? 'red' : 'green']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-        }
-
-        function shareDoctorKarl() {
-            if (navigator.share) {
-                navigator.share({
-                    title: "Digital Dr Karl",
-                    text: "Check out this X profile analyzer demo!",
-                    url: window.location.href
-                }).catch(err => console.log('Error sharing:', err));
+        installBtn.addEventListener('click', () => {
+          if (!deferredPrompt) return;
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(choiceResult => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('✅ User accepted the install prompt');
             } else {
-                alert("Sharing not supported on this browser.");
+              console.log('❌ User dismissed the install prompt');
             }
-        }
-    </script>
+            deferredPrompt = null;
+          });
+        });
+      });
 
+      // iPhone instructions popup
+      if (navigator.userAgent.match(/(iPhone|iPad|iPod)/i)) {
+        setTimeout(() => {
+          alert('📲 Tap Share button in Safari, then "Add to Home Screen" to install Digital Dr Karl!');
+        }, 5000);
+      }
+
+      function demoAnalyzeProfile() {
+        const username = document.getElementById('username').value;
+        const resultDiv = document.getElementById('result');
+        const jokeBox = document.getElementById('jokeBox');
+
+        if (!username) {
+          resultDiv.innerHTML = "<span style='color:red;'>Please enter a username.</span>";
+          return;
+        }
+
+        const followers = Math.floor(Math.random() * 10000);
+        const following = Math.floor(Math.random() * 5000);
+        const tweets = Math.floor(Math.random() * 1000);
+        const botScore = Math.floor(Math.random() * 100);
+        const followersGazillion = `${followers} Gazillion`;
+
+        resultDiv.innerHTML = `
+          <p><strong>Username:</strong> ${username}</p>
+          <p><strong>Followers:</strong> ${followersGazillion}</p>
+          <p><strong>Following:</strong> ${following}</p>
+          <p><strong>Total Tweets:</strong> ${tweets}</p>
+          <p><strong>🤖 Bot Probability:</strong> ${botScore}%</p>
+          <p>${botScore > 60 ? '⚔️ Bot Alert! Might be Skynet!' : '✅ Looks Human! Probably loves science!'}</p>
+        `;
+
+        document.getElementById('botChartContainer').style.display = "block";
+        createChart(followers, following, tweets, botScore);
+
+        jokeBox.innerHTML = jokes[Math.floor(Math.random() * jokes.length)];
+      }
+
+      function createChart(followers, following, tweets, botScore) {
+        const ctx = document.getElementById('botChart').getContext('2d');
+
+        if (window.botChart) window.botChart.destroy();
+
+        window.botChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Followers', 'Following', 'Tweets', 'Bot Score'],
+            datasets: [{
+              label: 'Bot Analysis',
+              data: [followers, following, tweets, botScore],
+              backgroundColor: ['green', 'gold', 'gold', botScore > 60 ? 'red' : 'green']
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: { beginAtZero: true }
+            }
+          }
+        });
+      }
+
+      function shareDoctorKarl() {
+        if (navigator.share) {
+          navigator.share({
+            title: "Digital Dr Karl",
+            text: "Check out this X profile analyzer demo!",
+            url: window.location.href
+          }).catch(err => console.log('Error sharing:', err));
+        } else {
+          alert("Sharing not supported on this browser.");
+        }
+      }
+    </script>
 </body>
 
 </html>
