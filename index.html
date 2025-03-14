@@ -7,11 +7,6 @@
 
   <!-- =====================================================
       ✅ DIGITAL DR KARL DEMO WEBSITE - FINAL VERSION ✅
-  ===========================================================
-      1. Random bot analysis + science jokes.
-      2. Clone/Fork the project: https://github.com/WebSwiftSEO?tab=repositories
-      3. Install as PWA on Android/iPhone.
-      4. Offline support via Service Worker.
   =========================================================== -->
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,8 +15,8 @@
   <meta property="og:description" content="Analyze X profiles, detect bots, and laugh while learning!" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- ✅ Favicon (Base64 Image, Fully Working) -->
-  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB10lEQVQ4T6XTsUvDUBQH8N/MOpNgpiAqJ1uKCMEIorR2djoogUifYOIjh7sbfYyCBBKImXKhAJWBo2hJSWkPBsIUECS7zbt5zvG/gGhsaSOyMjONjDnqGHb7PB9lgkZxNR4+3CwIDj9fK+CZbEwcrlcaV5fsHp6Gl+u19YoN+vkP2wsr6Xx03HvjkFLrUSr1gYSAcf12IYWWF5XLAHFfCeVx+k1I3Ts4h9y8x9BDb39DC27RH0HDAd0uLJsy1PKhKplAqlhAoUqFfH5+EZmLiLgWbB4hFsVDI5XFEUurXxWzJ/2CQyYAVBdCGC+jf1CwFxXMf0VAHOJ1rZSEi+0dpzAWAxOMQq9UKLxeB+yTkfQjqNR9vn8W8L1eq1Wq1TJN53mZiLvu9EnOGQ8FkIur1eqFCshmMqlyIrDZn1eq9VKt9skfAbBGf+AdrxL2XY/rsjAAAAAElFTkSuQmCC" />
+  <!-- ✅ Base64 Favicon -->
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" />
 
   <!-- ✅ PWA Manifest -->
   <link rel="manifest" href="manifest.json" />
@@ -59,19 +54,6 @@
       font-size: 30px;
     }
 
-    input,
-    button {
-      width: 85%;
-      padding: 12px;
-      margin: 15px 0;
-      border: 2px solid gold;
-      background: black;
-      color: gold;
-      font-size: 18px;
-      text-align: center;
-      border-radius: 8px;
-    }
-
     .share-btn {
       margin-top: 15px;
       width: 85%;
@@ -107,22 +89,44 @@
       margin: 10px 0;
     }
 
-    .modal {
-  display: none;
-  position: fixed; /* ✅ Fixed at top of screen */
-  top: 0;          /* ✅ No more under the footer */
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.8);
-  z-index: 9999;   /* ✅ Stay on top of everything */
-    }
-
     footer {
       margin-top: 40px;
       padding: 20px;
       font-size: 14px;
       color: gray;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-content {
+      background-color: #111;
+      margin: 10% auto;
+      padding: 20px;
+      border: 2px solid #FFD700;
+      width: 80%;
+      color: #FFD700;
+      border-radius: 12px;
+    }
+
+    .close-btn {
+      color: red;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      color: #fff;
     }
   </style>
 </head>
@@ -152,31 +156,25 @@
       <a href="https://www.instagram.com/doctorkarl/" target="_blank">Follow Dr Karl on Instagram</a>
     </div>
 
-      <!-- Info Modal at end of body, not in footer! -->
-    <div id="infoModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeInfo()">&times;</span>
-      <h2>About Digital Dr Karl 🧑‍🔬</h2>
-      <p>Analyze profiles, detect bots, and have a laugh!</p>
-    </div>
-
     <footer>
       🚀 Clone this project on GitHub:<br>
       <a href="https://github.com/WebSwiftSEO?tab=repositories" target="_blank" style="color:gold;">WebSwiftSEO Repositories</a>
     </footer>
   </div>
 
-  <div id="infoModal" class="modal" style="display:none;">
+  <div id="infoModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeInfo()">&times;</span>
       <h2>About Digital Dr Karl 🧑‍🔬</h2>
-      <p><strong>What is this?</strong><br>Analyze X profiles for bots and laugh with Dr Karl’s science jokes!</p>
+      <p><strong>What is this?</strong> Analyze X profiles for bots and laugh along with Dr Karl’s science jokes!</p>
+      <p><strong>Features:</strong></p>
       <ul style="text-align:left;">
         <li>✅ X Profile Analyzer</li>
         <li>✅ Bot Probability Score</li>
         <li>✅ Science Jokes!</li>
         <li>✅ PWA - Installable + Offline</li>
       </ul>
+      <p><strong>iPhone/Mac Install:</strong> Tap the Share button and select \"Add to Home Screen\"</p>
     </div>
   </div>
 
@@ -194,22 +192,33 @@
       "Why did the photon refuse to check its luggage? It was traveling light!"
     ];
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('installBtn').style.display = 'block';
-    });
+    window.addEventListener('load', () => {
+      document.getElementById('jokeBox').innerText = jokes[Math.floor(Math.random() * jokes.length)];
 
-    document.getElementById('installBtn').addEventListener('click', () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => deferredPrompt = null);
+      const installBtn = document.getElementById('installBtn');
+      const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+      if (isIos && isSafari) {
+        installBtn.textContent = "📲 iPhone: Add to Home Screen";
+        installBtn.onclick = () => {
+          alert('Tap the Share button in Safari and select "Add to Home Screen".');
+        };
+      } else {
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
+          installBtn.style.display = 'block';
+
+          installBtn.addEventListener('click', () => {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(() => {
+              deferredPrompt = null;
+            });
+          });
+        });
       }
     });
-
-    window.onload = () => {
-      document.getElementById('jokeBox').innerText = jokes[Math.floor(Math.random() * jokes.length)];
-    };
 
     function demoAnalyzeProfile() {
       const username = document.getElementById('username').value;
@@ -236,6 +245,9 @@
 
       document.getElementById('botChartContainer').style.display = 'block';
       createChart(followers, following, tweets, botScore);
+
+      // ✅ Refresh joke when Analyze is clicked
+      document.getElementById('jokeBox').innerText = jokes[Math.floor(Math.random() * jokes.length)];
     }
 
     function createChart(followers, following, tweets, botScore) {
@@ -280,9 +292,6 @@
     function closeInfo() {
       document.getElementById('infoModal').style.display = 'none';
     }
-    // Refresh joke when Analyze is clicked
-      document.getElementById('jokeBox').innerText = jokes[Math.floor(Math.random() * jokes.length)];
-
   </script>
 
 </body>
